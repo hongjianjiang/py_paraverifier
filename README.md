@@ -2,7 +2,7 @@
 2021/4/21 生成ml的json文件
 python2 gen.py -m mutualEx.m <br>
 
-2021/4/22 编写paraverifier-type类型
+2021/4/22 编写paraverifier-type类型、图结构定义
 
 directory
 ---
