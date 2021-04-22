@@ -1,58 +1,80 @@
 {
+    "name": "mutual_ex",
+    "vars": {
+        "n": "nat => nat",
+        "x": "bool"
+    },
     "states": [
-        "I", 
-        "T", 
-        "C", 
+        "I",
+        "T",
+        "C",
         "E"
-    ], 
+    ],
     "rules": [
         {
-            "var": "i", 
-            "guard": "n[i] = I ", 
-            "name": "Try", 
+            "var": "k",
+            "guard": "n k = I",
             "assign": {
-                "n[i]": "T"
+                "n k": "T"
             }
-        }, 
+        },
         {
-            "var": "i", 
-            "guard": "n[i] = T& x = true ", 
-            "name": "Crit", 
+            "var": "k",
+            "guard": "n k = T & x = true",
             "assign": {
-                "x": "false", 
-                "n[i]": "C"
+                "n k": "C",
+                "x": "false"
             }
-        }, 
+        },
         {
-            "var": "i", 
-            "guard": "n[i] = C ", 
-            "name": "Exit", 
+            "var": "k",
+            "guard": "n k = C",
             "assign": {
-                "n[i]": "E"
+                "n k": "E"
             }
-        }, 
+        },
         {
-            "var": "i", 
-            "guard": "n[i] = E ", 
-            "name": "Idle", 
+            "var": "k",
+            "guard": "n k = E",
             "assign": {
-                "x": "true", 
-                "n[i]": "I"
+                "n k": "I",
+                "x": "true"
             }
         }
-    ], 
+    ],
     "invs": [
         {
             "vars": [
-                "i", 
+                "i",
                 "j"
-            ], 
-            "prop": "!n i =C & n j =C"
+            ],
+            "prop": "~ (n i = C & n j = C)"
+        },
+        {
+            "vars": [
+                "i"
+            ],
+            "prop": "~ (n i = C & x = true)"
+        },
+        {
+            "vars": [
+                "i",
+                "j"
+            ],
+            "prop": "~ (n i = C & n j = E)"
+        },
+        {
+            "vars": [
+                "i"
+            ],
+            "prop": "~ (n i = E & x = true)"
+        },
+        {
+            "vars": [
+                "i",
+                "j"
+            ],
+            "prop": "~ (n i = E & n j = E)"
         }
-    ], 
-    "name": "n_mutualEx", 
-    "vars": {
-        "x": "boolean", 
-        "n": "nat=>nat"
-    }
+    ]
 }
