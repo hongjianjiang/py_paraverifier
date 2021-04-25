@@ -1,6 +1,7 @@
 #author: Hongjian Jiang
 from type import *
-from z3 import *
+from smt2 import *
+import re
 
 def weakprecondition(statement, formula):
     '''
@@ -30,11 +31,15 @@ def weakprecondition(statement, formula):
 
 
 def invHoldCondition(statement, formula):
+    '''
+    :param statement: the statement of the guarded command
+    :param formula: the invariant formula
+    :return: the condition of which invhold meets
+    '''
+    smt2 = SMT2("x = Int('x') y = Int('y')")
     wp = weakprecondition(statement,formula)
-    solver = Solver()
-    solver.add(wp)
-    solver.check()
-    if solver.check() == sat:
+    if smt2.check("solve(x > 2, y < 10, x + 2*y == 7)") == "sat":
+        print("sat")
         flag = 1
     elif wp == formula:
         flag = 2
@@ -42,11 +47,26 @@ def invHoldCondition(statement, formula):
         flag = 3
     return flag
 
-print("====================")
-statement = SAssign(Var("n",[1]),EVar("C"))
-statement1 = SAssign("x",FChaos())
-formula = FNeg(FAndlist([FEqn(EVar(Var("n",[1])),EConst(Strc("C"))),FEqn(EVar(Var("n",[2])),EConst(Strc("C")))]))
-statement2 = SParallel([statement, statement1])
-print(weakprecondition(statement2, formula))
-invHoldCondition(statement2,formula)
 
+def invHoldForCondition3(guard, formula):
+    '''
+    :param guard: the formula of the guard command
+    :param formula: the formula of the weakest precondition
+    :return: the disconjunction of the guard and the formula
+    '''
+    negg = FNeg(guard)
+    guard_str=re.findall(r'[(](.*)[)]', str(negg), re.S)
+    formula_str=re.findall(r'[(](.*)[)]', str(formula), re.S)
+    guard_str.append(formula_str[0])
+    result = " & ".join(guard_str)
+    return "!("+result+")"
+
+
+if __name__ == '__main__':
+    statement = SAssign(Var("n",[1]),EVar("C"))
+    statement1 = SAssign("x",FChaos())
+    formula = FNeg(FAndlist([FEqn(EVar(Var("n",[1])),EConst(Strc("C"))),FEqn(EVar(Var("n",[2])),EConst(Strc("C")))]))
+    statement2 = SParallel([statement, statement1])
+    wp = weakprecondition(statement2,formula)
+    guard = FAndlist([FEqn(EVar(Var("n",[1])),EConst(Strc("T"))),FEqn(EVar(Var("x",[])),EConst(Boolc("True")))])
+    print(invHoldForCondition3(guard, wp))
