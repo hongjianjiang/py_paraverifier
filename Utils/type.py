@@ -131,7 +131,7 @@ class Var():
         str1 = ""
         if len(self.indexs[0]) > 0:
             for i in self.indexs[0]:
-                str1+=self.name+"["+str(i)+"]"+ " "
+                str1+=self.name+"["+str(i)+"]"
         else:
             str1 = self.name
         return str1
@@ -208,13 +208,14 @@ class Formula():
         return self.ty == self.EXISTFORMULA
 
     def getVars(self):
-        return self.vars
+        return [str(v) for v in self.vars]
 
     def getExps(self):
         return self.exps
 
     def getSubFormula(self):
         pass
+
 
 
 class EConst(Exp):
@@ -230,7 +231,7 @@ class EConst(Exp):
         return str(self.context)
 
 print("test6:", EConst(Boolc("True")))
-
+# print(EConst(Boolc("True")).getVars())
 class EVar(Exp):
     '''
     Expression of Var
@@ -238,13 +239,13 @@ class EVar(Exp):
     def __init__(self, var):
         self.ty = Exp.VAR
         self.var = var 
-        self.vars = [var]
+        self.vars = [str(var)]
 
     def __str__(self):
         return str(self.var)
 
 print("test7:",EVar(Var("n",[1,2,3,4])))
-
+print(EVar(Var("n",[1])).getVars())
 
 class EParamr(Exp):
     '''
@@ -259,7 +260,6 @@ class EParamr(Exp):
         return str(self.paramr)
 
 print("test8:",EParamr(Paramdef("i","State")))
-
 
 class FChaos(Formula):
     '''
@@ -305,7 +305,8 @@ class EIte(Exp,Formula):
         return "If " + str(self.form) +" then " + str(self.exp1) + " else "+ str(self.exp2)
 
 
-print("test11:",EIte(FMiracle(),EParamr(Paramdef("i","State")),EConst(Intc(1))))
+print("test11:",EIte(FMiracle(),EVar(Var("n",[1,2,3,4])),EVar(Var("n",[1,2,3,4]))))
+print(EIte(FMiracle(),EVar(Var("n",[1])),EVar(Var("n",[1,2,3,4]))).getVars())
 
 class EUIF(Exp):
     '''
@@ -344,7 +345,10 @@ class FEqn(Formula):
     def __str__(self):
         return str(self.exp1) + "=" + str(self.exp2)
 
-print("test12:",FEqn(EVar(Var("Name",[])),EVar(Var("Age",[]))))
+print("test12:",FEqn(EVar(Var("Name",[])),EConst(Strc("I"))))
+print(FEqn(EVar(Var("N",[1])),EConst(Strc("I"))).getVars())
+print(EVar(Var("N",[1])).getVars())
+print(EVar(Var("N",[1])).getVars() == FEqn(EVar(Var("N",[1])),EConst(Strc("I"))).getVars())
 
 
 class FNeg(Formula):
@@ -358,10 +362,10 @@ class FNeg(Formula):
         self.exps = self.formula.getExps()
 
     def __str__(self):
-        return "!(%s)" % self.formula
+        return "!%s" % self.formula
 
 print("test13:",FNeg(FEqn(EVar(Var("Name",[])),EVar(Var("Age",[])))))
-
+print(FNeg(FEqn(EVar(Var("N",[1])),EConst(Strc("I")))).getVars())
 class FAndlist(Formula):
     '''
     formula andlist
@@ -369,19 +373,28 @@ class FAndlist(Formula):
     def __init__(self,*args):
         self.ty = Formula.ANDLIST
         self.formulalist = args
-        self.vars = [f.getVars() for f in self.formulalist[0]]
+        self.vars = []
         self.exps = [f.getExps() for f in self.formulalist[0]]
 
     def getSubFormula(self):
-        return self.formulalist[0]
+        return [str(f) for f in self.formulalist[0]]
 
     def getArgs(self):
         return self.formulalist[0]
 
+    def getVars(self):
+        for f in self.formulalist[0]:
+            self.vars +=f.getVars()
+        return self.vars
+
     def __str__(self):
         return "(" + " & ".join([str(f) for f in self.formulalist[0]]) + ")"
 
-print("test14:",FAndlist([FEqn(EVar(Var("Name",[])),EVar(Var("Age",[]))),FEqn(EVar(Var("Name",[])),EVar(Var("Age",[])))]))
+
+print("test14:", FAndlist([FEqn(EVar(Var("Name",[])),EVar(Var("Age",[]))),FEqn(EVar(Var("Name",[])),EVar(Var("Age",[])))]))
+print(FAndlist([FEqn(EVar(Var("Name",[])),EVar(Var("Age",[]))),FEqn(EVar(Var("Name",[])),EVar(Var("Age",[])))]).getSubFormula())
+print( FAndlist([FEqn(EVar(Var("Name",[])),EVar(Var("Age",[]))),FEqn(EVar(Var("Name",[])),EVar(Var("Age",[])))]).getVars())
+
 
 class FOrlist(Formula):
     '''
@@ -390,12 +403,24 @@ class FOrlist(Formula):
     def __init__(self, *args):
         self.ty = Formula.ORLIST
         self.formulalist = args
-        self.vars = [f.getVars() for f in self.formulalist[0]]
+        self.vars = []
         self.exps = [f.getExps() for f in self.formulalist[0]]
 
     def __str__(self):
         return "(" + " | ".join([str(f) for f in self.formulalist[0]]) + ")"
+
+    def getSubFormula(self):
+        return [str(f) for f in self.formulalist[0]]
+
+    def getVars(self):
+        for f in self.formulalist[0]:
+            self.vars +=f.getVars()
+        return self.vars
+
+
 print("test15:",FOrlist([FEqn(EVar(Var("Name",[])),EVar(Var("Age",[]))),FEqn(EVar(Var("Name",[])),EVar(Var("Age",[])))]))
+print(FOrlist([FEqn(EVar(Var("Name",[])),EVar(Var("Age",[]))),FEqn(EVar(Var("Name",[])),EVar(Var("Age",[])))]).getSubFormula())
+print(FOrlist([FEqn(EVar(Var("Name",[])),EConst(Strc("I"))),FEqn(EVar(Var("Name",[])),EConst(Strc("T")))]).getVars())
 
 
 class FImply(Formula):
@@ -410,7 +435,20 @@ class FImply(Formula):
     def __str__(self):
         return str(self.formula1) + " -> " + str(self.formula2)
 
+    def getSubFormula(self):
+        return [str(self.formula1),str(self.formula2)]
+
+    # def getVars(self):
+    #     for f in self.formula2.getVars():
+    #         print(f)
+    #         self.formula1.getVars().append(f)
+    #     print(self.formula1.getVars())
+    #     return self.formula1.getVars()
+
 print("test16:", FImply(FEqn(EVar(Var("Name",[])),EVar(Var("Age",[]))),FEqn(EVar(Var("Name",[])),EVar(Var("Age",[])))))
+print(FImply(FEqn(EVar(Var("Name",[])),EConst(Strc("I"))),FEqn(EVar(Var("Name1",[])),EVar(Var("Mae1",[])))).getVars())
+
+
 class ForallFormula(Formula):
     '''
     formula forallformula
@@ -427,7 +465,7 @@ class ForallFormula(Formula):
 
 
 print("test17:",ForallFormula(FEqn(EVar(Var("Name",[])),EVar(Var("Age",[]))),[Paramdef("i","State"),Paramdef("j","State")]))
-
+print(ForallFormula(FEqn(EVar(Var("Name",[])),EVar(Var("Age",[]))),[Paramdef("i","State"),Paramdef("j","State")]).getVars())
 
 class ExistFormula(Formula):
     '''formula existformula'''
@@ -478,7 +516,9 @@ class SAssign(Statement):
     def getExp(self):
         return self.exp
 
-print("test19:",SAssign(Var("n",[1]),EConst(Boolc("True"))))
+
+print("test19:",SAssign(Var("n",[1]),EConst(Strc("I"))))
+print(SAssign(Var("n",[1]),EConst(Strc("T"))).getExp())
 
 class SParallel(Statement):
     '''
@@ -489,21 +529,22 @@ class SParallel(Statement):
         self.statementlist = args
         self.vars = []
         self.exps = []
+
     def __str__(self):
         return " ; ".join([ str(v) for v in self.statementlist[0]])
 
     def getVars(self):
         for v in self.statementlist[0]:
-            self.vars.append(v.getVar())
+            self.vars.append(str(v.getVar()))
         return self.vars
 
     def getExps(self):
         for v in self.statementlist[0]:
-            self.exps.append(v.getExp())
+            self.exps.append(str(v.getExp()))
         return self.exps
 
 print("test20: ",SParallel([SAssign(Var("n",[1]),EConst(Boolc("True"))),SAssign(Var("x",[]),EConst(Boolc("True")))]))
-
+print(SParallel([SAssign(Var("n",[1]),EConst(Boolc("True"))),SAssign(Var("x",[]),EConst(Boolc("True")))]).getExps())
 
 class Rule():
     '''
@@ -519,8 +560,8 @@ class Rule():
         return "rule:{\nname: " + str(self.name) + "\nparams: " + "".join([str(i) for i in self.params]) +"\nguard: " + str(self.formula) + "\naction"+ str(self.statement)+"\n}"
 
 
-
 print("test21:",Rule("try",FEqn(EVar("n"),EConst(Strc("I"))),SAssign("n",EVar("T")), Paramdef("1", "client")))
+
 
 class Prop():
     '''
