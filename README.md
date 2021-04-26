@@ -14,6 +14,7 @@ Directory Structure:
 ---
 - Protocol stores the ocaml files of parameterized protocol<br>
 - Utils is used for basic function<br>
+-- gen: generator of the json file
 - Graph is used for create the structure of formula's graph<br>
 - RN is for files used in reinforce learning <br>
 
