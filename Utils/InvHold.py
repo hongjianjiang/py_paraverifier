@@ -30,20 +30,22 @@ def weakprecondition(statement, formula):
     return resultFormula
 
 
-def invHoldCondition(statement, formula, context):
+def invHoldCondition(statement, formula, file):
     '''
     :param statement: the statement of the guarded command
     :param formula: the invariant formula
     :return: the condition of which invhold meets
     '''
-    smt2 = SMT2(context)
+    smt2 = SMT2(file)
     wp = weakprecondition(statement,formula)
-    if smt2.check() == "sat":
-        print("sat")
+    if smt2.check(wp) == "unsat":
+        print("invHold for case 1")
         flag = 1
-    elif wp == formula:
+    elif str(wp) == str(formula):
+        print("invHold for case 2")
         flag = 2
     else:
+        print("invHold for case 3")
         flag = 3
     return flag
 
@@ -63,13 +65,13 @@ def invHoldForCondition3(guard, formula):
 
 
 if __name__ == '__main__':
-    statement = SAssign(Var("n",[1]),EVar("T"))
+    statement = SAssign(Var("n",[3]),EVar("T"))
     statement1 = SAssign("x",FChaos())
     formula = FNeg(FAndlist([FEqn(EVar(Var("n",[1])),EConst(Strc("C"))),FEqn(EVar(Var("n",[2])),EConst(Strc("C")))]))
     statement2 = SParallel([statement, statement1])
     wp = weakprecondition(statement,formula)
-    print(wp)
+    # print(wp)
     guard = FAndlist([FEqn(EVar(Var("n",[1])),EConst(Strc("T"))),FEqn(EVar(Var("x",[])),EConst(Boolc("True")))])
-    print(invHoldForCondition3(guard, wp))
+    # print(invHoldForCondition3(guard, wp))
     # Not(And(C == C, Select N 2 ==C))
-    # invHoldCondition(statement, formula)
+    invHoldCondition(statement, formula,'../Protocol/n_mutualEx.json')

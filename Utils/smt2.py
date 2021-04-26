@@ -3,9 +3,7 @@
 
 import json
 import re
-from z3 import Solver, parse_smt2_string
-
-SPLIT_CHAR = ','
+from z3 import Solver
 
 
 class SMT2(object):
