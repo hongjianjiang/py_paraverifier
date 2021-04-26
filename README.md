@@ -8,7 +8,7 @@ python2 gen.py -m mutualEx.m <br>
 2021/4/22 编写paraverifier-type类型、图结构定义<br>
 2021/4/23 RN：gym环境定义、引入z3py作为reward判定器<br>
 2021/4/25 Type modification & implement of weakest precondition<br>
-
+2021/4/26 实现smt求解器<br>
 
 Directory Structure:
 ---
