@@ -10,7 +10,10 @@ SPLIT_CHAR = ','
 
 class SMT2(object):
     '''
-
+    Given the protocol's json file address and the invariant
+    Json file servers as the context of the z3 environment
+    Invariant servers as the assertation
+    SMT2 returns the bool value whether it is true or not
     '''
     def __init__(self, file):
         super(SMT2, self).__init__()
