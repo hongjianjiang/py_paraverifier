@@ -30,15 +30,15 @@ def weakprecondition(statement, formula):
     return resultFormula
 
 
-def invHoldCondition(statement, formula):
+def invHoldCondition(statement, formula, context):
     '''
     :param statement: the statement of the guarded command
     :param formula: the invariant formula
     :return: the condition of which invhold meets
     '''
-    smt2 = SMT2("x = Int('x') y = Int('y')")
+    smt2 = SMT2(context)
     wp = weakprecondition(statement,formula)
-    if smt2.check("solve(x > 2, y < 10, x + 2*y == 7)") == "sat":
+    if smt2.check() == "sat":
         print("sat")
         flag = 1
     elif wp == formula:
@@ -63,10 +63,13 @@ def invHoldForCondition3(guard, formula):
 
 
 if __name__ == '__main__':
-    statement = SAssign(Var("n",[1]),EVar("C"))
+    statement = SAssign(Var("n",[1]),EVar("T"))
     statement1 = SAssign("x",FChaos())
     formula = FNeg(FAndlist([FEqn(EVar(Var("n",[1])),EConst(Strc("C"))),FEqn(EVar(Var("n",[2])),EConst(Strc("C")))]))
     statement2 = SParallel([statement, statement1])
-    wp = weakprecondition(statement2,formula)
+    wp = weakprecondition(statement,formula)
+    print(wp)
     guard = FAndlist([FEqn(EVar(Var("n",[1])),EConst(Strc("T"))),FEqn(EVar(Var("x",[])),EConst(Boolc("True")))])
     print(invHoldForCondition3(guard, wp))
+    # Not(And(C == C, Select N 2 ==C))
+    # invHoldCondition(statement, formula)
