@@ -1,11 +1,6 @@
 # coding=utf-8
+#author: Hongjian Jiang
 
-"""
-Functions for checking smt2 formulae
-
-@author Yongjian Li <lyj238@gmail.com>
-@author Kaiqiang Duan <duankq@ios.ac.cn>
-"""
 import json
 import re
 from z3 import Solver, parse_smt2_string
@@ -14,6 +9,9 @@ SPLIT_CHAR = ','
 
 
 class SMT2(object):
+    '''
+
+    '''
     def __init__(self, file):
         super(SMT2, self).__init__()
         self.file = file
