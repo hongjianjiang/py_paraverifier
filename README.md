@@ -10,11 +10,11 @@ python2 gen.py -m mutualEx.m <br>
 2021/4/25 Type modification & implement of weakest precondition<br>
 
 
-directory
+Directory Structure:
 ---
-Protocol stores the ocaml files of parameterized protocol<br>
-Utils is used for basic function<br>
-Graph is used for create the structure of formula's graph<br>
-RN is for files used in reinforce learning <br>
+`Protocol stores the ocaml files of parameterized protocol<br>
+`Utils is used for basic function<br>
+`Graph is used for create the structure of formula's graph<br>
+`RN is for files used in reinforce learning <br>
 
 
