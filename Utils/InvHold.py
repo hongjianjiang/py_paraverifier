@@ -3,25 +3,22 @@ from type import *
 from smt2 import *
 import re
 
-def weakprecondition(statement, formula):
+def weakestprecondition(statement, formula):
     '''
     :param statement: assignment or parallel assigement
     :param formula: given invariant formula
     :return: the string of the weakest precondtion
     '''
-    #judge the type of the given statement
-    resultFormula = FChaos()
+    resultFormula = FChaos()    #judge the type of the given statement
     varsInformula = formula.getVars()
-    if statement.isAssign():
-        #single assign condition
+    if statement.isAssign():        #single assign condition
         var = statement.getVar()
         exp = statement.getExp()
         if not str(var) in varsInformula: #assignment has no affection on formula
             resultFormula = str(formula)
         else:#has side effection
             resultFormula = (str(formula).replace(str(var),str(exp)))
-    else:
-        #parall assignment condition
+    else:        #parall assignment condition
         vars = statement.getVars()
         exps = statement.getExps()
         for i,v in enumerate(vars):
@@ -37,7 +34,7 @@ def invHoldCondition(statement, formula, file):
     :return: the condition of which invhold meets
     '''
     smt2 = SMT2(file)
-    wp = weakprecondition(statement,formula)
+    wp = weakestprecondition(statement,formula)
     if smt2.check(wp) == "unsat":
         print("invHold for case 1")
         flag = 1
@@ -65,13 +62,11 @@ def invHoldForCondition3(guard, formula):
 
 
 if __name__ == '__main__':
-    statement = SAssign(Var("n",[3]),EVar("T"))
+    statement = SAssign(Var("n",[3]),EVar("C"))
     statement1 = SAssign("x",FChaos())
     formula = FNeg(FAndlist([FEqn(EVar(Var("n",[1])),EConst(Strc("C"))),FEqn(EVar(Var("n",[2])),EConst(Strc("C")))]))
     statement2 = SParallel([statement, statement1])
-    wp = weakprecondition(statement,formula)
-    # print(wp)
+    wp = weakestprecondition(statement2,formula)
     guard = FAndlist([FEqn(EVar(Var("n",[1])),EConst(Strc("T"))),FEqn(EVar(Var("x",[])),EConst(Boolc("True")))])
-    # print(invHoldForCondition3(guard, wp))
-    # Not(And(C == C, Select N 2 ==C))
     invHoldCondition(statement, formula,'../Protocol/n_mutualEx.json')
+    # print(invHoldForCondition3(guard,wp))

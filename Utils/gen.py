@@ -539,10 +539,12 @@ class RuleSet(object):
             rule_action = re.findall(r"(?<=begin).+?(?=end;)",rules_str,re.S)                
             rule_name = re.findall(r"[a-zA-Z]+\"",rules_str,re.S)
             rule_var = re.findall(r"\[[a-zA-Z]+",rules_str)
+            # print(len(rule_guard))
             for i in range(len(rule_guard)):
                 self.rudic['name'] = rule_name[i].replace("\"","")   
                 self.rudic['var'] = rule_var[0].replace('[',"")
-                self.rudic['guard']=rule_guard[i]         
+                self.rudic['guard']= rule_guard[i]
+                # print(rule_action[i])
                 temp = re.findall(r"[^;]+?(?=:\=)", rule_action[i].replace(" ","").replace("\n",""),re.S)
                 pre = re.findall(r"(?<=:\=).+?(?=;)",rule_action[i].replace(" ","").replace("\n",""), re.S)
                 for j in range(len(temp)):

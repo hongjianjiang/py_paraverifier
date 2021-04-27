@@ -73,6 +73,7 @@ class SMT2(object):
                             str_formula += " (select " + self.getPrefixInArray(j) + ' i)'
                 str_formula += ')'
             str_formula += ')'
+        print(str_context+str_formula)
         s.from_string(str_context+str_formula)
         # s.add(parse_smt2_string((context if context else self.context) + smt2_formula))
         # print("--------------\n")

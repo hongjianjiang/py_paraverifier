@@ -99,6 +99,8 @@ class Paramref(Paramr):
         self.name = name
         self.ty = Paramr.PARAMREF
 
+    def __str__(self):
+        return self.name
 
 class Paramfix(Paramr):
     def __init__(self, vn, tn, value):
@@ -505,27 +507,28 @@ class Rule():
     '''
     rule definition
     '''
-    def __init__(self,name,formula,statement,*args):
-        self.name = name
+    def __init__(self,formula,statement,*args):
+        # self.name = name
         self.formula = formula 
         self.statement = statement
         self.params = args
 
     def __str__(self):
-        return "rule:{\nname: " + str(self.name) + "\nparams: " + "".join([str(i) for i in self.params]) +"\nguard: " + str(self.formula) + "\naction"+ str(self.statement)+"\n}"
+        return "rule:{params: " + "".join([str(i) for i in self.params]) +"\nguard: " + str(self.formula) + "\naction: "+ str(self.statement)+"\n}"
 
 
 class Prop():
     '''
     definition property
     '''
-    def __init__(self,name,formula,*args):
-        self.name = name 
+    def __init__(self,formula,*args):
+        # self.name = name
         self.formula = formula
         self.params = args
 
     def __str__(self):
-        return "prop:{\nname: " + self.name + "\nparams:"+"".join([str(i) for i in self.params])  +"\ninv:" + str(self.formula)+"\n}"
+        # return "prop:{\nname: " + self.name + "\nparams:"+"".join([str(i) for i in self.params])  +"\ninv:" + str(self.formula)+"\n}"
+        return "prop:{params:"+"".join([str(i) for i in self.params])  +"\ninv:" + str(self.formula)+"\n}"
 
 
 if __name__ == '__main__':
@@ -565,5 +568,5 @@ if __name__ == '__main__':
     print("test20: ",SParallel([SAssign(Var("n",[1]),EConst(Boolc("True"))),SAssign(Var("x",[]),EConst(Boolc("True")))]))
     print(SParallel([SAssign(Var("n",[1]),EConst(Boolc("True"))),SAssign(Var("x",[]),EConst(Boolc("True")))]).getExps())
     print("test21:", Rule("try", FEqn(EVar("n"), EConst(Strc("I"))), SAssign("n", EVar("T")), Paramdef("1", "client")))
-    prop = Prop("mutualEx", FNeg(FAndlist([FEqn(EVar(Var("n", [1])), EConst(Strc("C"))), FEqn(EVar(Var("n", [1])), EConst(Strc("C")))])), [1, 2])
-    print("test22:",prop)
+    # prop = Prop("mutualEx", FNeg(FAndlist([FEqn(EVar(Var("n", [1])), EConst(Strc("C"))), FEqn(EVar(Var("n", [1])), EConst(Strc("C")))])), [1, 2])
+    # print("test22:",prop)
