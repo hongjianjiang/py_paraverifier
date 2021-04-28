@@ -342,7 +342,7 @@ class FNeg(Formula):
         self.exps = self.formula.getExps()
 
     def __str__(self):
-        return "!%s" % self.formula
+        return "~%s" % self.formula
 
 
 class FAndlist(Formula):
@@ -516,6 +516,12 @@ class Rule():
     def __str__(self):
         return "rule:{params: " + "".join([str(i) for i in self.params]) +"\nguard: " + str(self.formula) + "\naction: "+ str(self.statement)+"\n}"
 
+    def getStatement(self):
+        return self.statement
+
+    def getGuard(self):
+        return self.formula
+
 
 class Prop():
     '''
@@ -530,6 +536,8 @@ class Prop():
         # return "prop:{\nname: " + self.name + "\nparams:"+"".join([str(i) for i in self.params])  +"\ninv:" + str(self.formula)+"\n}"
         return "prop:{params:"+"".join([str(i) for i in self.params])  +"\ninv:" + str(self.formula)+"\n}"
 
+    def getInv(self):
+        return self.formula
 
 if __name__ == '__main__':
     print("test1:",Intc(1))

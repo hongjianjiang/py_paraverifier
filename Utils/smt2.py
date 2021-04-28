@@ -22,8 +22,12 @@ class SMT2(object):
         return result[0]
 
     def getPrefixInArray(self,formula):
-        result = re.findall(r'(.*?)\[',formula,re.S)
-        return result[0].replace('[','')
+        if '[' in formula:
+            result = re.findall(r"(.*?)\[.*\]+", formula, re.S)
+            res = result[0]
+        else:
+            res= formula
+        return res
 
     def check(self, smt2_formula):
         s = Solver()
@@ -86,4 +90,4 @@ class SMT2(object):
 if __name__ == '__main__':
     smt2 = SMT2('../Protocol/n_mutualEx.json')
     # print(smt2.check("!(n[2]=C)"))
-    print(smt2.check('!(T=C & n[2]=C)'))
+    print(smt2.check('~(T=C & n[j]=C)'))

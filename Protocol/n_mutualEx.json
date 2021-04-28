@@ -12,32 +12,32 @@
     ],
     "rules": [
         {
-            "var": "k",
-            "guard": "n k = I",
+            "var": "i",
+            "guard": "n[i] = I",
             "assign": {
-                "n k": "T"
+                "n[i]": "T"
             }
         },
         {
-            "var": "k",
-            "guard": "n k = T & x = true",
+            "var": "i",
+            "guard": "n[i] = T & x = true",
             "assign": {
-                "n k": "C",
+                "n[i]": "C",
                 "x": "false"
             }
         },
         {
-            "var": "k",
-            "guard": "n k = C",
+            "var": "i",
+            "guard": "n[i] = C",
             "assign": {
-                "n k": "E"
+                "n[i]": "E"
             }
         },
         {
-            "var": "k",
-            "guard": "n k = E",
+            "var": "i",
+            "guard": "n[i] = E",
             "assign": {
-                "n k": "I",
+                "n[i]": "I",
                 "x": "true"
             }
         }
@@ -48,33 +48,7 @@
                 "i",
                 "j"
             ],
-            "prop": "~ (n i = C & n j = C)"
-        },
-        {
-            "vars": [
-                "i"
-            ],
-            "prop": "~ (n i = C & x = true)"
-        },
-        {
-            "vars": [
-                "i",
-                "j"
-            ],
-            "prop": "~ (n i = C & n j = E)"
-        },
-        {
-            "vars": [
-                "i"
-            ],
-            "prop": "~ (n i = E & x = true)"
-        },
-        {
-            "vars": [
-                "i",
-                "j"
-            ],
-            "prop": "~ (n i = E & n j = E)"
+            "prop": "~ (n[i] = C & n[j] = C)"
         }
     ]
 }

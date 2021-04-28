@@ -35,6 +35,8 @@ def invHoldCondition(statement, formula, file):
     '''
     smt2 = SMT2(file)
     wp = weakestprecondition(statement,formula)
+    print("=====================")
+    print("assign:", statement,"\ninv:", formula)
     if smt2.check(wp) == "unsat":
         print("invHold for case 1")
         flag = 1
@@ -44,6 +46,7 @@ def invHoldCondition(statement, formula, file):
     else:
         print("invHold for case 3")
         flag = 3
+    print("=====================")
     return flag
 
 
@@ -58,15 +61,15 @@ def invHoldForCondition3(guard, formula):
     formula_str=re.findall(r'[(](.*)[)]', str(formula), re.S)
     guard_str.append(formula_str[0])
     result = " & ".join(guard_str)
-    return "!("+result+")"
+    return "~("+result+")"
 
 
 if __name__ == '__main__':
-    statement = SAssign(Var("n",[3]),EVar("C"))
+    statement = SAssign(Var("n",['i']),EVar("T"))
     statement1 = SAssign("x",FChaos())
-    formula = FNeg(FAndlist([FEqn(EVar(Var("n",[1])),EConst(Strc("C"))),FEqn(EVar(Var("n",[2])),EConst(Strc("C")))]))
+    formula = FNeg(FAndlist([FEqn(EVar(Var("n",['i'])),EConst(Strc("C"))),FEqn(EVar(Var("n",['j'])),EConst(Strc("C")))]))
     statement2 = SParallel([statement, statement1])
-    wp = weakestprecondition(statement2,formula)
+    wp = weakestprecondition(statement,formula)
     guard = FAndlist([FEqn(EVar(Var("n",[1])),EConst(Strc("T"))),FEqn(EVar(Var("x",[])),EConst(Boolc("True")))])
     invHoldCondition(statement, formula,'../Protocol/n_mutualEx.json')
     # print(invHoldForCondition3(guard,wp))

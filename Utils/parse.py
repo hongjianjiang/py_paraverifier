@@ -9,7 +9,7 @@ grammar = r"""
         | "true" -> true
         | "false" -> false 
         
-    ?var: WORD  [WORD*] -> var
+    ?var: WORD  [("[" WORD "]")*] -> var
     
     //?paramr : WORD -> paramref
          
@@ -197,13 +197,15 @@ def parse_prop(s):
 
 if __name__ == '__main__':
     text3 = r'I'
+    formula = '~ (n[i] = E & n[j] = E)'
     # print(parse_state(text3))
-    text = r"{'vars': ['i', 'j'], 'prop': '~ (n i = E & n j = E)'}"
+    text = r"{'vars': ['i', 'j'], 'prop': '~ (n[i] = E & n[j] = E)'}"
     text1 = r"{'vars': ['i', 'j'], 'prop': '~ (n i = C & n j = C)'}"
-    text2 = r"{'var': 'k', 'guard': 'n k = I', 'assign': {'n k': 'T'}}"
+    text2 = r"{'var': 'k', 'guard': 'n[k] = I', 'assign': {'n[k]': 'T'}}"
+    assign = r"'n k': 'T'"
     prop = r"{'vars': ['i', 'j'], 'prop': '~ (n i = C & n j = C)'}"
     rule = r"{'var': 'k', 'guard': 'n k = T & x = true', 'assign': {'n k': 'C', 'x': 'false'}}"
-
-    # print(parse_rule(text))
+    print(parse_prop(text))
+    print(parse_rule(text2))
     # print(parse_rule(rule))
-    print(parse_prop(prop))
+    # print(parse_statement(assign))
