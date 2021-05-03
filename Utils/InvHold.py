@@ -46,7 +46,6 @@ def invHoldCondition(statement, formula, file):
     else:
         print("invHold for case 3")
         flag = 3
-    print("=====================")
     return flag
 
 
