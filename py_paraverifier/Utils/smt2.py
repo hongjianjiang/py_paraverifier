@@ -35,7 +35,7 @@ class SMT2(object):
 
     def check(self, smt2_formula):
         s = Solver()
-        nsf = self.getStringInFormula(smt2_formula).replace("(","").replace(")","")# the negation of the smt2 formula
+        nsf = self.getStringInFormula(smt2_formula).replace("(","").replace(")","") # the negation of the smt2 formula
         with open(self.file) as f:
             data = json.load(f)
             states = data['states']
@@ -92,7 +92,7 @@ class SMT2(object):
                             str_formula += " " + j
                 str_formula += ')'
             str_formula += ')'
-        print(str_context+str_formula)
+        # print(str_context+str_formula)
         s.from_string(str_context+str_formula)
         if str(s.check())=="sat":
             print(s.model())

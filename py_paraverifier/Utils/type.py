@@ -514,7 +514,7 @@ class Rule():
         self.params = args
 
     def __str__(self):
-        return "rule:{params: " + "".join([str(i) for i in self.params]) +"\nguard: " + str(self.formula) + "\naction: "+ str(self.statement)+"\n}"
+        return "rule " +"".join([str(i) for i in self.params]) +"\nguard: " + str(self.formula) + "\naction: "+ str(self.statement)+"\n}"
 
     def getStatement(self):
         return self.statement

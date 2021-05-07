@@ -61,7 +61,9 @@ class ParaSystem():
         for inv in self.allinvs:
             for r in self.rules:
                 statement = r.getStatement()
-                if invHoldCondition(statement,parse_form(inv),file) == 3:
+                flag = invHoldCondition(statement,parse_form(inv),file)
+                if flag == 3:
+                    print('case 3')
                     newInv=invHoldForCondition3(r.getGuard(),weakestprecondition(statement,parse_form(inv)))
         return newInv
 
@@ -103,9 +105,21 @@ def load_system(filename):
                         r['assign'][new1] = r['assign'][k]
                         del r['assign'][k]
                 T1 = parse_rule(str(r))
-                rules.append(T1)
                 print(r)
+                rules.append(T1)
+        for r in data['rules']:
+            r['var'] = str(r['var']).replace(T.getArgs()[0][-1], "k")
+            r['guard'] = str(r['guard']).replace(T.getArgs()[0][-1], "k")
+            for k in r['assign'].keys():
+                if T.getArgs()[0][-1] in k:
+                    new1 = str(k).replace(T.getArgs()[0][-1], "k")
+                    r['assign'][new1] = r['assign'][k]
+                    del r['assign'][k]
+            T2 = parse_rule(str(r))
+            rules.append(T2)
+            print(r)
         invs.append(T)
+
     return ParaSystem(name, vars, states, rules, invs)
 
 

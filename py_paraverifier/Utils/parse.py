@@ -207,7 +207,7 @@ if __name__ == '__main__':
     assign = r"'n k': 'T'"
     prop = r"{'vars': ['i', 'j'], 'prop': '~ (n i = C & n j = C)'}"
     rule = r"{'var': 'k', 'guard': 'n k = T & x = true', 'assign': {'n k': 'C', 'x': 'false'}}"
-    print(parse_prop(text).getArgs())
-    print(parse_rule(text2).getArgs()[0])
+    # print(parse_prop(text).getArgs())
+    # print(parse_rule(text2).getArgs()[0])
     # print(parse_rule(rule))
     # print(parse_statement(assign))

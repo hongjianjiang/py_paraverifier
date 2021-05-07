@@ -27,6 +27,8 @@ def weakestprecondition(statement, formula):
         for i,v in enumerate(vars):
             if v in varsInformula:
                 resultFormula= (str(formula).replace(v,exps[i]))
+            else:
+                resultFormula = str(formula)
     return resultFormula
 
 
@@ -38,14 +40,15 @@ def invHoldCondition(statement, formula, file):
     '''
     smt2 = SMT2(file)
     wp = weakestprecondition(statement,formula)
-    # print("===================================")
+    print("===================================")
     # print("assign:", statement,"\ninv:", formula)
-    if smt2.check(wp) == "unsat":
-        print("invHold for case 1")
-        flag = 1
-    elif str(wp) == str(formula):
+    print(wp,statement,formula)
+    if str(wp) == str(formula):
         print("invHold for case 2")
         flag = 2
+    elif smt2.check(wp) == "unsat":
+        print("invHold for case 1")
+        flag = 1
     else:
         print("invHold for case 3")
         flag = 3
@@ -67,17 +70,17 @@ def invHoldForCondition3(guard, formula):
 
 
 if __name__ == '__main__':
-    statement = SAssign(Var("n",['i']),EVar("C"))
-    # statement1 = SAssign("x",FChaos())
-    # formula = FNeg(FAndlist([FEqn(EVar(Var("n",['i'])),EConst(Strc("C"))),FEqn(EVar(Var("n",['j'])),EConst(Strc("C")))]))
-    # statement2 = SParallel([statement, statement1])
-    # wp = weakestprecondition(statement2,formula)
-    # guard = FAndlist([FEqn(EVar(Var("n",['i'])),EConst(Strc("T"))),FEqn(EVar(Var("x",[])),EConst(Boolc("True")))])
+    statement = SAssign(Var("n",['k']),EVar("C"))
+    statement1 = SAssign("x",FChaos())
+    formula = FNeg(FAndlist([FEqn(EVar(Var("n",['i'])),EConst(Strc("C"))),FEqn(EVar(Var("n",['j'])),EConst(Strc("C")))]))
+    statement2 = SParallel([statement, statement1])
+    wp = weakestprecondition(statement,formula)
+    guard = FAndlist([FEqn(EVar(Var("n",['i'])),EConst(Strc("T"))),FEqn(EVar(Var("x",[])),EConst(Boolc("True")))])
     # print(guard)
     # print(statement2)
-    # print(wp)
+    print(wp)
     # try_assign = SAssign(Var("n",['i']),EVar("T"))
     # wp1 = weakestprecondition(try_assign,formula)
     # print(wp1)
-    # invHoldCondition(statement, formula,'../Protocol/n_mutualEx.json')
+    invHoldCondition(statement, formula,'../Protocol/n_mutualEx.json')
     # print(invHoldForCondition3(guard,wp))
