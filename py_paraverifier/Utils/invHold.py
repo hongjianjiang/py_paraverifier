@@ -15,6 +15,8 @@ def weakestprecondition(statement, formula):
     resultFormula = FChaos()    #judge the type of the given statement
     varsInformula = formula.getVars()
     if statement.isAssign():        #single assign condition
+        print(statement)
+        print('assign')
         var = statement.getVar()
         exp = statement.getExp()
         if not str(var) in varsInformula: #assignment has no affection on formula
@@ -24,11 +26,13 @@ def weakestprecondition(statement, formula):
     else:        #parall assignment condition
         vars = statement.getVars()
         exps = statement.getExps()
+        resultFormula = str(formula)
         for i,v in enumerate(vars):
             if v in varsInformula:
-                resultFormula= (str(formula).replace(v,exps[i]))
+                resultFormula = resultFormula.replace(v,exps[i])
+                print(resultFormula)
             else:
-                resultFormula = str(formula)
+                pass
     return resultFormula
 
 
@@ -40,18 +44,18 @@ def invHoldCondition(statement, formula, file):
     '''
     smt2 = SMT2(file)
     wp = weakestprecondition(statement,formula)
-    print("===================================")
     # print("assign:", statement,"\ninv:", formula)
-    print(wp,statement,formula)
-    if str(wp) == str(formula):
-        print("invHold for case 2")
-        flag = 2
-    elif smt2.check(wp) == "unsat":
+    # print(wp,statement,formula)
+    if smt2.check(wp) == "unsat":
         print("invHold for case 1")
         flag = 1
+    elif str(wp) == str(formula):
+        print("invHold for case 2")
+        flag = 2
     else:
         print("invHold for case 3")
         flag = 3
+    print('====================================')
     return flag
 
 
@@ -71,9 +75,11 @@ def invHoldForCondition3(guard, formula):
 
 if __name__ == '__main__':
     statement = SAssign(Var("n",['k']),EVar("C"))
+    print(statement.isAssign())
     statement1 = SAssign("x",FChaos())
     formula = FNeg(FAndlist([FEqn(EVar(Var("n",['i'])),EConst(Strc("C"))),FEqn(EVar(Var("n",['j'])),EConst(Strc("C")))]))
     statement2 = SParallel([statement, statement1])
+    print(statement2.isAssign())
     wp = weakestprecondition(statement,formula)
     guard = FAndlist([FEqn(EVar(Var("n",['i'])),EConst(Strc("T"))),FEqn(EVar(Var("x",[])),EConst(Boolc("True")))])
     # print(guard)

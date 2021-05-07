@@ -58,13 +58,12 @@ class ParaSystem():
         return self.allinvs
 
     def search_invariant(self):
+        newInv = []
         for inv in self.allinvs:
             for r in self.rules:
                 statement = r.getStatement()
-                flag = invHoldCondition(statement,parse_form(inv),file)
-                if flag == 3:
-                    print('case 3')
-                    newInv=invHoldForCondition3(r.getGuard(),weakestprecondition(statement,parse_form(inv)))
+                if invHoldCondition(statement,parse_form(inv),file) == 3:
+                    newInv.append(invHoldForCondition3(r.getGuard(),weakestprecondition(statement,parse_form(inv))))
         return newInv
 
     def judgeInv(self,inv):
@@ -105,8 +104,8 @@ def load_system(filename):
                         r['assign'][new1] = r['assign'][k]
                         del r['assign'][k]
                 T1 = parse_rule(str(r))
-                print(r)
                 rules.append(T1)
+
         for r in data['rules']:
             r['var'] = str(r['var']).replace(T.getArgs()[0][-1], "k")
             r['guard'] = str(r['guard']).replace(T.getArgs()[0][-1], "k")
@@ -117,9 +116,7 @@ def load_system(filename):
                     del r['assign'][k]
             T2 = parse_rule(str(r))
             rules.append(T2)
-            print(r)
         invs.append(T)
-
     return ParaSystem(name, vars, states, rules, invs)
 
 
