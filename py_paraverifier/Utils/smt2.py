@@ -33,6 +33,14 @@ class SMT2(object):
             res= formula
         return res
 
+    def getEqualFirst(self,formula):
+        result = re.findall(r'.+?(?==)',formula,re.S)
+        return result[0]
+
+    def getEqualSecond(self,formula):
+        result = re.findall(r'(?<==).+', formula, re.S)
+        return result[0]
+
     def check(self, smt2_formula):
         s = Solver()
         nsf = self.getStringInFormula(smt2_formula).replace("(","").replace(")","") # the negation of the smt2 formula

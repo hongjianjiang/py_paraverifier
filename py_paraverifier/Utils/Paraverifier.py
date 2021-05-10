@@ -3,7 +3,7 @@
 import os
 from Utils.invHold import *
 from Utils.parse import *
-
+from Utils.smt2 import *
 file = '../Protocol/n_mutualEx.json'
 
 
@@ -21,8 +21,8 @@ class ParaSystem():
         self.states = states
         self.rules = rules
         self.invs = invs
-
         self.allinvs = []
+        self.smt2 = SMT2(file)
 
         # var_map used in gcl library
         self.var_map = dict()
@@ -63,7 +63,15 @@ class ParaSystem():
             for r in self.rules:
                 statement = r.getStatement()
                 if invHoldCondition(statement,parse_form(inv),file) == 3:
-                    newInv.append(invHoldForCondition3(r.getGuard(),weakestprecondition(statement,parse_form(inv))))
+                    if invHoldForCondition3(r.getGuard(),weakestprecondition(statement,parse_form(inv))) not in newInv:
+                        newStr = invHoldForCondition3(r.getGuard(),weakestprecondition(statement,parse_form(inv)))
+                        temp = self.smt2.getStringInFormula(newStr)
+                        formula_list = temp.replace(" ","").split('&')
+                        for f in formula_list:
+                            if self.smt2.getEqualFirst(f)==self.smt2.getEqualSecond(f):
+                                formula_list.remove(f)
+                        newStr = '~('+" & ".join(formula_list)+')'
+                        newInv.append(newStr)
         return newInv
 
     def judgeInv(self,inv):
@@ -121,7 +129,11 @@ def load_system(filename):
 
 
 if __name__ == '__main__':
-
     p = load_system('n_mutualEx')
     p.add_invariant_prop()
     print("new inv:", p.search_invariant())
+    smt2 = SMT2('n_mutualEx')
+    print(smt2.getStringVarinFormula('n[i]=T'))
+    print(smt2.getStringInFormula('(n[i]=T)'))
+    print(smt2.getEqualSecond('x=T'))
+    print(smt2.getEqualSecond('T=T')==smt2.getEqualFirst('T=T'))
