@@ -10,6 +10,8 @@ python2 gen.py -m mutualEx.m <br>
 2021/4/25 Type modification & implement of weakest precondition<br>
 2021/4/26 实现smt求解器<br>
 2021/4/27 实现parse模块，将协议转化到type<br>
+2021/5/11 gen修改，支持多重变量定义<br>
+
 
 Directory Structure:
 ---
