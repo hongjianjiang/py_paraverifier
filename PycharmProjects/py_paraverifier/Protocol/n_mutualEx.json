@@ -1,0 +1,63 @@
+{
+    "name": "mutual_ex",
+    "vars": {
+        "n": "nat => nat",
+        "x": "bool"
+    },
+    "states": [
+        "I",
+        "T",
+        "C",
+        "E"
+    ],
+    "init": [
+        {
+            "var": "i",
+            "assign": {
+                "n[i]": "I",
+                "x": "false"
+            }
+        }
+    ],
+    "rules": [
+        {
+            "var": "i",
+            "guard": "n[i] = I",
+            "assign": {
+                "n[i]": "T"
+            }
+        },
+        {
+            "var": "i",
+            "guard": "n[i] = T & x = true",
+            "assign": {
+                "n[i]": "C",
+                "x": "false"
+            }
+        },
+        {
+            "var": "i",
+            "guard": "n[i] = C",
+            "assign": {
+                "n[i]": "E"
+            }
+        },
+        {
+            "var": "i",
+            "guard": "n[i] = E",
+            "assign": {
+                "n[i]": "I",
+                "x": "true"
+            }
+        }
+    ],
+    "invs": [
+        {
+            "vars": [
+                "i",
+                "j"
+            ],
+            "prop": "~ (n[i] = C & n[j] = C)"
+        }
+    ]
+}

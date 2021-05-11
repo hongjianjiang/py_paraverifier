@@ -1,0 +1,60 @@
+{
+    "name": "n_mutual",
+    "vars": {
+        "n": "nat=>nat",
+        "x": "boolean"
+    },
+    "states": [
+        "I",
+        "T",
+        "C",
+        "E"
+    ],
+    "init": {
+        "var": "i",
+        "guard": "n[i] = I & x = true"
+    },
+    "rules": [
+        {
+            "name": "Try",
+            "var": "i",
+            "guard": "n[i] = I ",
+            "assign": {
+                "n[i]": "T"
+            }
+        },
+        {
+            "name": "Crit",
+            "var": "i",
+            "guard": "n[i] = T& x = true ",
+            "assign": {
+                "n[i]": "C",
+                "x": "false"
+            }
+        },
+        {
+            "name": "Exit",
+            "var": "i",
+            "guard": "n[i] = C ",
+            "assign": {
+                "n[i]": "E"
+            }
+        },
+        {
+            "name": "Idle",
+            "var": "i",
+            "guard": "n[i] = E ",
+            "assign": {
+                "n[i]": "I",
+                "x": "true"
+            }
+        }
+    ],
+    "invs": {
+        "vars": [
+            "i",
+            "j"
+        ],
+        "prop": "~ (n[i] = C & n[j] = C)"
+    }
+}

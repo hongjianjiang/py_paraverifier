@@ -1,0 +1,211 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Unused terminals:
+
+    ASSIGN
+    DIVIDE
+    DQM
+    IMPLY
+    LET
+    LMPAREN
+    LPAREN
+    MINUS
+    PLUS
+    RMPAREN
+    RPAREN
+    SENDTO
+    TIMES
+    begin
+    do
+    end
+    endfor
+    endruleset
+    endstartstate
+    for
+    invariant
+    rule
+    ruleset
+    startstate
+    var
+
+Grammar
+
+Rule 0     S' -> expression
+Rule 1     expression -> const ID COLON NUMBER SEMICOLON
+Rule 2     expression -> type ID COLON enum LBPAREN ID RBPAREN SEMICOLON
+Rule 3     expression -> NUMBER
+Rule 4     expression -> ID
+Rule 5     statement -> ID EQ NUMBER SEMICOLON
+Rule 6     statement -> expression
+
+Terminals, with rules where they appear
+
+ASSIGN               : 
+COLON                : 1 2
+DIVIDE               : 
+DQM                  : 
+EQ                   : 5
+ID                   : 1 2 2 4 5
+IMPLY                : 
+LBPAREN              : 2
+LET                  : 
+LMPAREN              : 
+LPAREN               : 
+MINUS                : 
+NUMBER               : 1 3 5
+PLUS                 : 
+RBPAREN              : 2
+RMPAREN              : 
+RPAREN               : 
+SEMICOLON            : 1 2 5
+SENDTO               : 
+TIMES                : 
+begin                : 
+const                : 1
+do                   : 
+end                  : 
+endfor               : 
+endruleset           : 
+endstartstate        : 
+enum                 : 2
+error                : 
+for                  : 
+invariant            : 
+rule                 : 
+ruleset              : 
+startstate           : 
+type                 : 2
+var                  : 
+
+Nonterminals, with rules where they appear
+
+expression           : 6 0
+statement            : 
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . expression
+    (1) expression -> . const ID COLON NUMBER SEMICOLON
+    (2) expression -> . type ID COLON enum LBPAREN ID RBPAREN SEMICOLON
+    (3) expression -> . NUMBER
+    (4) expression -> . ID
+
+    const           shift and go to state 2
+    type            shift and go to state 5
+    NUMBER          shift and go to state 4
+    ID              shift and go to state 3
+
+    expression                     shift and go to state 1
+
+state 1
+
+    (0) S' -> expression .
+
+
+
+state 2
+
+    (1) expression -> const . ID COLON NUMBER SEMICOLON
+
+    ID              shift and go to state 6
+
+
+state 3
+
+    (4) expression -> ID .
+
+    $end            reduce using rule 4 (expression -> ID .)
+
+
+state 4
+
+    (3) expression -> NUMBER .
+
+    $end            reduce using rule 3 (expression -> NUMBER .)
+
+
+state 5
+
+    (2) expression -> type . ID COLON enum LBPAREN ID RBPAREN SEMICOLON
+
+    ID              shift and go to state 7
+
+
+state 6
+
+    (1) expression -> const ID . COLON NUMBER SEMICOLON
+
+    COLON           shift and go to state 8
+
+
+state 7
+
+    (2) expression -> type ID . COLON enum LBPAREN ID RBPAREN SEMICOLON
+
+    COLON           shift and go to state 9
+
+
+state 8
+
+    (1) expression -> const ID COLON . NUMBER SEMICOLON
+
+    NUMBER          shift and go to state 10
+
+
+state 9
+
+    (2) expression -> type ID COLON . enum LBPAREN ID RBPAREN SEMICOLON
+
+    enum            shift and go to state 11
+
+
+state 10
+
+    (1) expression -> const ID COLON NUMBER . SEMICOLON
+
+    SEMICOLON       shift and go to state 12
+
+
+state 11
+
+    (2) expression -> type ID COLON enum . LBPAREN ID RBPAREN SEMICOLON
+
+    LBPAREN         shift and go to state 13
+
+
+state 12
+
+    (1) expression -> const ID COLON NUMBER SEMICOLON .
+
+    $end            reduce using rule 1 (expression -> const ID COLON NUMBER SEMICOLON .)
+
+
+state 13
+
+    (2) expression -> type ID COLON enum LBPAREN . ID RBPAREN SEMICOLON
+
+    ID              shift and go to state 14
+
+
+state 14
+
+    (2) expression -> type ID COLON enum LBPAREN ID . RBPAREN SEMICOLON
+
+    RBPAREN         shift and go to state 15
+
+
+state 15
+
+    (2) expression -> type ID COLON enum LBPAREN ID RBPAREN . SEMICOLON
+
+    SEMICOLON       shift and go to state 16
+
+
+state 16
+
+    (2) expression -> type ID COLON enum LBPAREN ID RBPAREN SEMICOLON .
+
+    $end            reduce using rule 2 (expression -> type ID COLON enum LBPAREN ID RBPAREN SEMICOLON .)
+
