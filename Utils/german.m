@@ -29,13 +29,11 @@ var
   AuxData : DATA;
 
 
-ruleset d : DATA do startstate "Init"
-  for i : NODE do
-    Chan1[i].Cmd := Empty; Chan2[i].Cmd := Empty; Chan3[i].Cmd := Empty;
-    Cache[i].State := I; InvSet[i] := false; ShrSet[i] := false;
+startstate "Init"
+  for i : NODE; d : DATA do
+    Chan1[i].Cmd := Empty; Chan2[i].Cmd := Empty; Chan3[i].Cmd := Empty; Cache[i].State := I; InvSet[i] := false; ShrSet[i] := false; ExGntd := false; CurCmd := Empty; MemData := d; AuxData := d;
   endfor;
-  ExGntd := false; CurCmd := Empty; MemData := d; AuxData := d;
-endstartstate; endruleset;
+endstartstate;
 
 
 ruleset i : NODE; d : DATA do rule "Store"
@@ -63,11 +61,10 @@ ruleset i : NODE do rule "RecvReqS"
   for j : NODE do InvSet[j] := ShrSet[j]; end;
 endrule; endruleset;
 
-ruleset i : NODE do rule "RecvReqE"
+ruleset i : NODE ;j : NODE do rule "RecvReqE"
   CurCmd = Empty & Chan1[i].Cmd = ReqE
 ==> begin
-  CurCmd := ReqE; CurPtr := i; Chan1[i].Cmd := Empty;
-  for j : NODE do InvSet[j] := ShrSet[j]; end;
+  CurCmd := ReqE; CurPtr := i; Chan1[i].Cmd := Empty;  InvSet[j] := ShrSet[j]; end;
 endrule; endruleset;
 
 ruleset i : NODE do rule "SendInv"
@@ -83,7 +80,7 @@ ruleset i : NODE do rule "SendInvAck"
   Chan2[i].Cmd := Empty; Chan3[i].Cmd := InvAck;
   if (Cache[i].State = E) then Chan3[i].Data := Cache[i].Data; end;
   Cache[i].State := I;
-endrule; endruleset;
+end; endruleset;
 
 ruleset i : NODE do rule "RecvInvAck"
   Chan3[i].Cmd = InvAck & CurCmd != Empty
@@ -91,44 +88,43 @@ ruleset i : NODE do rule "RecvInvAck"
   Chan3[i].Cmd := Empty; ShrSet[i] := false;
   if (ExGntd = true)
   then ExGntd := false; MemData := Chan3[i].Data; end;
-endrule; endruleset;
+end; endruleset;
 
 ruleset i : NODE do rule "SendGntS"
   CurCmd = ReqS & CurPtr = i & Chan2[i].Cmd = Empty & ExGntd = false
 ==> begin
   Chan2[i].Cmd := GntS; Chan2[i].Data := MemData; ShrSet[i] := true;
   CurCmd := Empty;
-endrule; endruleset;
+end; endruleset;
 
-ruleset i : NODE do rule "SendGntE"
-  CurCmd = ReqE & CurPtr = i & Chan2[i].Cmd = Empty & ExGntd = false &
-  forall j : NODE do ShrSet[j] = false end
+ruleset i : NODE ;j : NODE do rule "SendGntE"
+  CurCmd = ReqE & CurPtr = i & Chan2[i].Cmd = Empty & ExGntd = false & ShrSet[j] = false
 ==> begin
-  Chan2[i].Cmd := GntE; Chan2[i].Data := MemData; ShrSet[i] := true;
-  ExGntd := true; CurCmd := Empty;
-endrule; endruleset;
+  Chan2[i].Cmd := GntE; Chan2[i].Data := MemData; ShrSet[i] := true; ExGntd := true; CurCmd := Empty;
+end; endruleset;
 
 ruleset i : NODE do rule "RecvGntS"
   Chan2[i].Cmd = GntS
 ==> begin
   Cache[i].State := S; Cache[i].Data := Chan2[i].Data;
   Chan2[i].Cmd := Empty;
-endrule; endruleset;
+end; endruleset;
 
 ruleset i : NODE do rule "RecvGntE"
   Chan2[i].Cmd = GntE
 ==> begin
   Cache[i].State := E; Cache[i].Data := Chan2[i].Data;
   Chan2[i].Cmd := Empty;
-endrule; endruleset;
+end; endruleset;
+
 
 
 ruleset i: NODE; j: NODE do
 invariant "CntrlProp"
-    i != j -> (Cache[i].State = E -> Cache[j].State = I) &
-              (Cache[i].State = S -> Cache[j].State = I | Cache[j].State = S);
+    i != j -> (Cache[i].State = E -> Cache[j].State = I) & (Cache[i].State = S -> Cache[j].State = I | Cache[j].State = S);
 endruleset;
 
+ruleset i: NODE do
 invariant "DataProp"
-  ( ExGntd = false -> MemData = AuxData ) &
-  forall i : NODE do Cache[i].State != I -> Cache[i].Data = AuxData end;
+  ( ExGntd = false -> MemData = AuxData ) & Cache[i].State != I -> Cache[i].Data = AuxData;
+endruleset;

@@ -1,8 +1,8 @@
 {
-    "name": "mutual_ex",
+    "name": "n_mutual",
     "vars": {
-        "n": "nat => nat",
-        "x": "bool"
+        "n": "nat=>nat",
+        "x": "boolean"
     },
     "states": [
         "I",
@@ -10,40 +10,49 @@
         "C",
         "E"
     ],
-    "init": [
-        {
-            "var": "i",
-            "assign": {
-                "n[i]": "I",
-                "x": "false"
-            }
-        }
-    ],
+    "init": {
+        "var": [
+            "i"
+        ],
+        "guard": "n[i] = I"
+    },
     "rules": [
         {
-            "var": "i",
+            "name": "Try",
+            "var": [
+                "i"
+            ],
             "guard": "n[i] = I",
             "assign": {
                 "n[i]": "T"
             }
         },
         {
-            "var": "i",
-            "guard": "n[i] = T & x = true",
+            "name": "Crit",
+            "var": [
+                "i"
+            ],
+            "guard": "n[i] = T& x = true",
             "assign": {
                 "n[i]": "C",
                 "x": "false"
             }
         },
         {
-            "var": "i",
+            "name": "Exit",
+            "var": [
+                "i"
+            ],
             "guard": "n[i] = C",
             "assign": {
                 "n[i]": "E"
             }
         },
         {
-            "var": "i",
+            "name": "Idle",
+            "var": [
+                "i"
+            ],
             "guard": "n[i] = E",
             "assign": {
                 "n[i]": "I",

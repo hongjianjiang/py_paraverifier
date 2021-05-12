@@ -514,13 +514,16 @@ class Rule():
         self.params = args
 
     def __str__(self):
-        return "rule:{params: " + "".join([str(i) for i in self.params]) +"\nguard: " + str(self.formula) + "\naction: "+ str(self.statement)+"\n}"
+        return "rule " +"".join([str(i) for i in self.params]) +"\nguard: " + str(self.formula) + "\naction: "+ str(self.statement)+"\n}"
 
     def getStatement(self):
         return self.statement
 
     def getGuard(self):
         return self.formula
+
+    def getArgs(self):
+        return self.params
 
 
 class Prop():
@@ -538,6 +541,9 @@ class Prop():
 
     def getInv(self):
         return self.formula
+
+    def getArgs(self):
+        return self.params
 
 if __name__ == '__main__':
     print("test1:",Intc(1))
@@ -576,5 +582,5 @@ if __name__ == '__main__':
     print("test20: ",SParallel([SAssign(Var("n",[1]),EConst(Boolc("True"))),SAssign(Var("x",[]),EConst(Boolc("True")))]))
     print(SParallel([SAssign(Var("n",[1]),EConst(Boolc("True"))),SAssign(Var("x",[]),EConst(Boolc("True")))]).getExps())
     print("test21:", Rule("try", FEqn(EVar("n"), EConst(Strc("I"))), SAssign("n", EVar("T")), Paramdef("1", "client")))
-    # prop = Prop("mutualEx", FNeg(FAndlist([FEqn(EVar(Var("n", [1])), EConst(Strc("C"))), FEqn(EVar(Var("n", [1])), EConst(Strc("C")))])), [1, 2])
-    # print("test22:",prop)
+    prop = Prop("mutualEx", FNeg(FAndlist([FEqn(EVar(Var("n", [1])), EConst(Strc("C"))), FEqn(EVar(Var("n", [1])), EConst(Strc("C")))])), [1, 2])
+    # print("test22:",prop.getArgs())

@@ -21,6 +21,10 @@ class SMT2(object):
         result = re.findall(r'[(](.*)[)]', formula, re.S)
         return result[0]
 
+    def getStringVarinFormula(self,formula):
+        result = re.findall(r'[\[](.*)[\]]', formula, re.S)
+        return result[0]
+
     def getPrefixInArray(self,formula):
         if '[' in formula:
             result = re.findall(r"(.*?)\[.*\]+", formula, re.S)
@@ -29,11 +33,17 @@ class SMT2(object):
             res= formula
         return res
 
+    def getEqualFirst(self,formula):
+        result = re.findall(r'.+?(?==)',formula,re.S)
+        return result[0]
+
+    def getEqualSecond(self,formula):
+        result = re.findall(r'(?<==).+', formula, re.S)
+        return result[0]
+
     def check(self, smt2_formula):
         s = Solver()
-        print(smt2_formula)
-        nsf = self.getStringInFormula(smt2_formula).replace("(","").replace(")","")# the negation of the smt2 formula
-        print(nsf)
+        nsf = self.getStringInFormula(smt2_formula).replace("(","").replace(")","") # the negation of the smt2 formula
         with open(self.file) as f:
             data = json.load(f)
             states = data['states']
@@ -54,7 +64,7 @@ class SMT2(object):
         if '&' in nsf:
             str_formula += 'and'
             if '[' in nsf:
-                str_context += ' (declare-const i Int)'
+                str_context += ' (declare-const i Int) (declare-const j Int)'
             for i in (nsf.replace(' ', '').split('&')):
                 l1 = i.split('=')
                 str_formula +=' (='
@@ -65,7 +75,8 @@ class SMT2(object):
                         str_formula += " " + j.lower()
                     elif self.getPrefixInArray(j) in vars:
                         if j.count('[') > 0:
-                            str_formula += " (select "+self.getPrefixInArray(j) + ' i)'
+                            vars1 = self.getStringVarinFormula(j)
+                            str_formula += " (select "+self.getPrefixInArray(j) + " " + vars1 +')'
                         else:
                             str_formula += " "+j
                 str_formula += ')'
@@ -74,27 +85,37 @@ class SMT2(object):
             if '[' in nsf:
                 str_context += ' (declare-const i Int)'
             for i in (nsf.replace(' ', '').split('&')):
+                print(i)
                 l1 = i.split('=')
                 str_formula += '='
                 for j in l1:
                     if j in states:
                         str_formula += " " + j
+                    elif j in boollist:
+                        str_formula += " " + j.lower()
                     elif self.getPrefixInArray(j) in vars:
                         if j.count('[') > 0:
                             str_formula += " (select " + self.getPrefixInArray(j) + ' i)'
+                        else:
+                            str_formula += " " + j
                 str_formula += ')'
             str_formula += ')'
-        print(str_context+str_formula)
+        # print(str_context+str_formula)
         s.from_string(str_context+str_formula)
-        # s.add(parse_smt2_string((context if context else self.context) + smt2_formula))
-        # print("--------------\n")
-        # if str(s.check()) == "sat":
-        #     print(s.model())
-        # print("--------------\n")
+        if str(s.check())=="sat":
+            print(s.model())
+
         return str(s.check())
 
 
 if __name__ == '__main__':
     smt2 = SMT2('../Protocol/n_mutualEx.json')
-    # print(smt2.check("!(n[2]=C)"))
-    print(smt2.check('~(n[i]=T & (x=True & (n[i]=C & n[j]=C)))'))
+    print(smt2.check("~(x=True & T=C)"))
+    # print(smt2.check('~(n[i]=C & n[j]=C)'))
+    #
+    # s= Solver()
+    # s.from_string("(declare-datatypes () ((state I T C E))) (declare-const n (Array Int state)) (declare-const x Bool) (declare-const i Int) (declare-const j Int) (assert (and (= (select n i ) C) (= (select n j) C) (not (= i j)) ))")
+    # print(s.check())
+    # print(s.model())
+    # print(smt2.check("~(n[i]=T & x=True & C=C & n[j]=C)"))
+    # print(smt2.check("~(x=True & n[j]=T)"))

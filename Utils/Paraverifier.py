@@ -1,24 +1,10 @@
 # Author: Hongjian Jiang
 
 import os
-import json
-from type import *
-from smt2 import *
-from invHold import *
-from parse import *
-
-GUARD, PRE, INV = range(3)
+from Utils.invHold import *
+from Utils.parse import *
+from Utils.smt2 import *
 file = '../Protocol/n_mutualEx.json'
-
-def convert_hint_type(s):
-    if s == "GUARD":
-        return GUARD
-    elif s == "PRE":
-        return PRE
-    elif s == "INV":
-        return INV
-    else:
-        raise NotImplementedError
 
 
 class ParaSystem():
@@ -35,8 +21,8 @@ class ParaSystem():
         self.states = states
         self.rules = rules
         self.invs = invs
-
         self.allinvs = []
+        self.smt2 = SMT2(file)
 
         # var_map used in gcl library
         self.var_map = dict()
@@ -67,25 +53,41 @@ class ParaSystem():
     def add_invariant_prop(self):
         """Add the invariant for the system in GCL."""
         for inv in self.invs:
-            # print(inv)
             formula = inv.getInv()
             self.allinvs.append(str(formula))
-        print(self.allinvs)
         return self.allinvs
 
     def search_invariant(self):
+        newInv = []
         for inv in self.allinvs:
             for r in self.rules:
                 statement = r.getStatement()
                 if invHoldCondition(statement,parse_form(inv),file) == 3:
-                    newInv=invHoldForCondition3(r.getGuard(),inv)
-                    #nusmv simpify
-                    print("newInv:",newInv)
-                    self.allinvs.append(newInv)
-# inv: ~(n[i]=T & (x=True & (n[i]=C & n[j]=C)))
+                    if invHoldForCondition3(r.getGuard(),weakestprecondition(statement,parse_form(inv))) not in newInv:
+                        newStr = invHoldForCondition3(r.getGuard(),weakestprecondition(statement,parse_form(inv)))
+                        temp = self.smt2.getStringInFormula(newStr)
+                        formula_list = temp.replace(" ","").split('&')
+                        for f in formula_list:
+                            if self.smt2.getEqualFirst(f)==self.smt2.getEqualSecond(f):
+                                formula_list.remove(f)
+                        newStr = '~('+" & ".join(formula_list)+')'
+                        newInv.append(newStr)
+        return newInv
+
+    def judgeInv(self,inv):
+        for r in self.rules:
+            statement = r.getStatement()
+            print('r:',r.getStatement())
+            print("wp:",weakestprecondition(statement,parse_form(inv)))
+            if invHoldCondition(statement,parse_form(inv),file) == 1:
+                return True
+        return False
+
+
 def load_system(filename):
     dn = os.path.dirname(os.getcwd())
-    with open(os.path.join(dn, 'Protocol/' + filename + '.json'), encoding='utf-8') as a:
+    with open(os.path.join(dn, 'Protocol/' + filename+'.json'), encoding='utf-8') as a:
+    # with open(filename, encoding='utf-8') as a:
         data = json.load(a)
     name = data['name']
     vars = []
@@ -97,18 +99,37 @@ def load_system(filename):
         T = parse_state(nm)
         states.append(T)
     rules = []
-    for r in data['rules']:
-        T = parse_rule(str(r))
-        rules.append(T)
     invs = []
     for inv in data['invs']:
         T = parse_prop(str(inv))
+        for new in T.getArgs()[0]:
+            for r in data['rules']:
+                r['var'] = str(r['var']).replace("i", new)
+                r['guard'] = str(r['guard']).replace("i", new)
+                for k in r['assign'].keys():
+                    if 'i' in k and new != 'i':
+                        new1 = str(k).replace("i", new)
+                        r['assign'][new1] = r['assign'][k]
+                        del r['assign'][k]
+                T1 = parse_rule(str(r))
+                rules.append(T1)
+
+        for r in data['rules']:
+            r['var'] = str(r['var']).replace(T.getArgs()[0][-1], "k")
+            r['guard'] = str(r['guard']).replace(T.getArgs()[0][-1], "k")
+            for k in r['assign'].keys():
+                if T.getArgs()[0][-1] in k:
+                    new1 = str(k).replace(T.getArgs()[0][-1], "k")
+                    r['assign'][new1] = r['assign'][k]
+                    del r['assign'][k]
+            T2 = parse_rule(str(r))
+            rules.append(T2)
         invs.append(T)
-    # print(ParaSystem(name, vars, states, rules, invs))
     return ParaSystem(name, vars, states, rules, invs)
 
 
 if __name__ == '__main__':
     p = load_system('n_mutualEx')
     p.add_invariant_prop()
-    p.search_invariant()
+    print("new inv:", p.search_invariant())
+

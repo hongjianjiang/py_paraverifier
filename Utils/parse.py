@@ -1,7 +1,7 @@
 # Author: Hongjian Jiang
 
 from lark import Lark, Transformer, v_args, exceptions
-from type import *
+from Utils.type import *
 
 grammar = r"""
     ?const: SIGNED_NUMBER -> intc
@@ -133,10 +133,12 @@ class ParaverifierTransformer(Transformer):
         return SParallel(args)
 
     def rule(self,*args):
-        return Rule(args[1],args[2],args[0])
+        args1=str(args[0])
+        return Rule(args[1],args[2],args1)
 
     def prop(self,*args):
         return Prop(args[1],args[0])
+
     def datalist(self,*args):
         result = []
         for i in range(len(args)):
@@ -205,7 +207,7 @@ if __name__ == '__main__':
     assign = r"'n k': 'T'"
     prop = r"{'vars': ['i', 'j'], 'prop': '~ (n i = C & n j = C)'}"
     rule = r"{'var': 'k', 'guard': 'n k = T & x = true', 'assign': {'n k': 'C', 'x': 'false'}}"
-    print(parse_prop(text))
-    print(parse_rule(text2))
+    # print(parse_prop(text).getArgs())
+    # print(parse_rule(text2).getArgs()[0])
     # print(parse_rule(rule))
     # print(parse_statement(assign))
