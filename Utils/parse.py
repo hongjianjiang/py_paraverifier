@@ -9,12 +9,12 @@ grammar = r"""
         | "true" -> true
         | "false" -> false 
         
-    ?var: WORD  [("[" WORD "]")*] -> var
+    ?var: WORD  [("_" WORD)*|(SIGNED_NUMBER "_" WORD)* ] -> var
     
     //?paramr : WORD -> paramref
          
     ?expression:  const -> econst
-        | var -> evar
+        | var WORD -> evar
         | "if" formula "then" expression "else" expression -> eite
         //| paramr -> eparam
         
@@ -33,7 +33,7 @@ grammar = r"""
         
     ?rule: "{" "'"  "var" "'" ":" "'" WORD "'" "," "'guard'" ":" "'"  formula "'" "," "'assign'"  ":" "{" statement "}" "}" ->  rule
     
-    ?prop: "{" "'" "vars" "'" ":" "[" datalist "]" "," "'prop':" "'" formula  "'" "}"-> prop
+    ?prop: "{" "'" "vars" "'" ":"  "[" datalist "]"  "," "'prop':" "'" formula  "'" "}"-> prop
     
     int : SIGNED_NUMBER
     string : ESCAPED_STRING
@@ -187,10 +187,12 @@ def parse_statement(s):
     """Parse a rule."""
     T = statement_parser.parse(s)
     return T
+
 def parse_rule(s):
     """Parse a rule."""
     T = rule_parser.parse(s)
     return T
+
 def parse_prop(s):
     """Parse a prop."""
     T = prop_parser.parse(s)

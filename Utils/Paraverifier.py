@@ -15,12 +15,13 @@ class ParaSystem():
     rules: list of rules.
     invs: list of invariants.
     """
-    def __init__(self, name, vars, states, rules, invs):
+    def __init__(self, name, vars, states, rules, invs, init):
         self.name = name
         self.vars = vars
         self.states = states
         self.rules = rules
         self.invs = invs
+        self.init = init
         self.allinvs = []
         self.smt2 = SMT2(file)
 
@@ -86,8 +87,8 @@ class ParaSystem():
 
 def load_system(filename):
     dn = os.path.dirname(os.getcwd())
-    with open(os.path.join(dn, 'Protocol/' + filename+'.json'), encoding='utf-8') as a:
-    # with open(filename, encoding='utf-8') as a:
+    # with open(os.path.join(dn, 'Protocol/' + filename+'.json'), encoding='utf-8') as a:
+    with open(filename, encoding='utf-8') as a:
         data = json.load(a)
     name = data['name']
     vars = []
@@ -101,6 +102,7 @@ def load_system(filename):
     rules = []
     invs = []
     for inv in data['invs']:
+        print(str(inv))
         T = parse_prop(str(inv))
         for new in T.getArgs()[0]:
             for r in data['rules']:
@@ -125,11 +127,15 @@ def load_system(filename):
             T2 = parse_rule(str(r))
             rules.append(T2)
         invs.append(T)
-    return ParaSystem(name, vars, states, rules, invs)
+    inits = []
+    init = data['init']
+    for i in init:
+        print(i['assign'])
+    return ParaSystem(name, vars, states, rules, invs, init)
 
 
 if __name__ == '__main__':
-    p = load_system('n_mutualEx')
-    p.add_invariant_prop()
-    print("new inv:", p.search_invariant())
+    p = load_system('n_mutual.json')
+    # p.add_invariant_prop()
+    # print("new inv:", p.search_invariant())
 

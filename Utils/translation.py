@@ -10,8 +10,7 @@ import os
 class TypeDef(object):
     def __init__(self, text):
         # hash map of all constants
-        self.consts = {}
-        self.const_defs = []
+        self.consts = []
         self.typedefs = []
         # value range of each type
         self.typenames = {}
@@ -23,6 +22,8 @@ class TypeDef(object):
         state_list = []
         enums = re.findall(r'\w*?\s*:\s*enum\s*\{(.*?)\}\s*;', text, re.S)
         enums1 = re.findall(r'(\w*?)\s*:\s*enum\s*\{(.*?)\}\s*;', text, re.S)
+        consts =  re.findall(r'(\w*?)\s*:\s*\d\.\..*?\s*;', text, re.S)
+        self.consts = consts
         self.typenames['bool'] = ['False', 'True'];
 
         for e in enums:
@@ -128,17 +129,31 @@ class Record(object):
 
 
 class Vardef(object):
-    def __init__(self, text, typenames,recordnames):
+    def __init__(self, text, typenames,recordnames,consts):
         super(Vardef, self).__init__()
         self.typenames = typenames
         self.recordnames = recordnames
+        self.consts = consts
         self.evaluate(text)
 
     def judgeRecord(self, n, p, v):
-        if v in self.typenames:
+        if (v in self.consts or v in self.typenames) and p in self.consts:
             return 'nat=>nat'
+        elif (v == 'boolean') and p in self.consts:
+            return 'nat=>bool'
+        elif (v in self.consts or v in self.typenames) and p == "":
+            return 'nat'
+        elif v == 'boolean':
+            return 'bool'
+        elif v in self.recordnames:
+            return v
         else:
-            return '%s' % (v)
+            return 'nat'
+            # if v == 'boolean':
+            #     return 'bool'
+            # else:
+            #     return 'nat'
+            # return '%s' % (v)
 
     def handleArr(self, n, v):
         if v[:5] == 'array':
@@ -146,9 +161,9 @@ class Vardef(object):
             pattern = re.compile(r'array\s*\[(.+)\]\s*of\s*(.+)')
             param, t = pattern.findall(v)[0]
             index += 1
-            return self.judgeRecord(n, '[paramdef \"i%d\" \"%s\"]' % (index, param), t)
+            return self.judgeRecord(n,  param, t)
         else:
-            return self.judgeRecord(n, '[]', v)
+            return self.judgeRecord(n, '', v)
 
     def evaluate(self, text):
         vs = {}
@@ -157,16 +172,15 @@ class Vardef(object):
             lambda x: tuple(map(lambda y: y.strip(), x.split(':'))),
             filter(lambda x: x.strip(), var_str.split(';'))
         )
-
-        for name,t in fields:
-            if self.handleArr(name,t) in self.recordnames:
+        for name, t in fields:
+            if self.handleArr(name, t) in self.recordnames:
                 if ';' in self.recordnames[self.handleArr(name,t)]:
                     for t in self.recordnames[self.handleArr(name,t)].split(';'):
-                        vs[name+"_"+t] = 'nat=>nat'
+                        vs[name+"_"+ t] = 'nat=>nat'
                 else:
-                    vs[self.recordnames[self.handleArr(name,t)]] = self.handleArr(name,t)
+                    vs[self.recordnames[self.handleArr(name, t)]] = self.handleArr(name, t)
             else:
-                vs[name]= self.handleArr(name, t)
+                vs[name] = self.handleArr(name, t)
         self.value = vs
 
 def analyzeParams(params):
@@ -214,7 +228,6 @@ class Formula(object):
             self.text = self.splitText(text)
             self.suffix = self.process(self.text)
             self.value = self.evaluate(self.suffix)
-            print(self.value)
         except Exception as e:
             print(e,text,self.text)
 
@@ -287,7 +300,6 @@ class Formula(object):
         values = []
         for s in suffix:
             if s not in self.__PRIORITY:
-                # print('not:',self.evalVar(s))
                 values.append((False, self.evalVar(s)))
             elif s in ['=', '!=']:
                 right = (values.pop()[1])
@@ -523,8 +535,6 @@ class RuleSet(object):
             rule_texts = re.findall(r'(rule.*?end;)', rules_str, re.S)
             for r in rule_texts:
                 r1 = Rule(r)
-
-                # print(r1)
                 rule_guard = re.findall(r"\"\w*\"\s*(.*?)(?=\=\=\>)", r, re.S)
                 rule_action = re.findall(r"(?<=begin)\s*(.+?)(?=end;)", r, re.S)
                 rule_name = re.findall(r"\"(.*?)\"", r, re.S)
@@ -579,7 +589,7 @@ class Invariant(object):
             vars = re.findall(r'(\w)\s*:\s*\w+',params,re.S)
             formula = Formula(form)
             pds["vars"] = vars
-            pds['prop'] = formula.value
+            pds['prop'] = formula.evalVar(formula.value)
             self.value.append(pds)
 
 
@@ -593,7 +603,7 @@ class Protocol(object):
 
     def evaluate(self):
         types = TypeDef(self.content)
-        vardefs = Vardef(self.content, types.typenames,types.recordnames)
+        vardefs = Vardef(self.content, types.typenames,types.recordnames,types.consts)
         init = StartState(self.content, types.consts, types.typenames)
         rulesets = RuleSet(self.content)
         invs = Invariant(self.content, types.consts, types.typenames)
