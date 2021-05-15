@@ -281,7 +281,7 @@ class Formula(object):
         [['a', 'b', 'c'], ['d'], ['e', 'f']]
         'Chan1[i].Cmd' -> Chan1_Cmd i
         """
-
+        # print('evalVar:', var)
         if '.' in var:
             list1 = var.split('.')
             name1 = []
@@ -293,6 +293,8 @@ class Formula(object):
                         name2.append(t.strip(']'))
                 name1.append(l.split('[')[0])
             return '%s %s' % ("_".join(name1), name2[0])
+        elif '[' in var:
+            return var.replace('[',' ').replace(']',' ')
         else:
             return var
 
@@ -370,7 +372,7 @@ class Statement(object):
         [['a', 'b', 'c'], ['d'], ['e', 'f']]
         'Chan1[i].Cmd' -> Chan1_Cmd i
         """
-
+        # print('evalVar:', var)
         if '.' in var:
             list1 = var.split('.')
             name1 = []
@@ -382,6 +384,8 @@ class Statement(object):
                         name2.append(t.strip(']'))
                 name1.append(l.split('[')[0])
             return '%s %s' % ("_".join(name1), name2[0])
+        elif '[' in var:
+            return var.replace('[', ' ').replace(']', ' ')
         else:
             return var
 
@@ -535,40 +539,45 @@ class RuleSet(object):
             rule_texts = re.findall(r'(rule.*?end;)', rules_str, re.S)
             for r in rule_texts:
                 r1 = Rule(r)
-                rule_guard = re.findall(r"\"\w*\"\s*(.*?)(?=\=\=\>)", r, re.S)
-                rule_action = re.findall(r"(?<=begin)\s*(.+?)(?=end;)", r, re.S)
-                rule_name = re.findall(r"\"(.*?)\"", r, re.S)
+                rule_guard = re.findall(r"\"\w*\"\s*(.*?)(?=\=\=\>)", r, re.S)[0]
+                rule_action = re.findall(r"(?<=begin)\s*(.+?)(?=end;)", r, re.S)[0]
+                rule_name = re.findall(r"\"(.*?)\"", r, re.S)[0]
+                # print(rule_guard,rule_action,rule_name)
                 rule_var = re.findall(r'(?<=\[)(.*?)(?=\])', r, re.S)
+                # print(len(rule_guard),len(rule_action),len(rule_name),len(rule_var))
                 for v in rule_var:
                     if v in vars:
                         pass
                     else:
                         vars.append(v)
-                for i in range(len(rule_guard)):
-                    self.rudic['name'] = rule_name[i].replace("\"", "")
-                    self.rudic['var'] = vars
-                    self.rudic['guard']= r1.formula.evalVar(rule_guard[i].strip())
-                    temp = re.findall(r"[^;]+?(?=:\=)", rule_action[i].replace(" ","").replace("\n",""),re.S)
-                    pre = re.findall(r"(?<=:\=).+?(?=;)", rule_action[i].replace(" ","").replace("\n",""), re.S)
-                    for j in range(len(temp)):
-                        action[r1.statement.evalVar(temp[j])] = r1.statement.evalVar(pre[j])
-                    # self.finalActions.append(action)
-                    self.rudic['assign'] = action
-                    action = {}
-                    self.finalRules.append(self.rudic)
-                    self.rudic = {}
+                self.rudic['name'] = rule_name.replace("\"", "")
+                self.rudic['var'] = vars
+                # # print(rule_guard[i].strip(),r1.formula.evalVar(rule_guard[i].strip()))
+                # f = Formula(rule_guard.strip())
+                self.rudic['guard'] = Formula(rule_guard.strip()).value
+                temp = re.findall(r"[^;]+?(?=:\=)", rule_action.replace(" ", "").replace("\n", ""), re.S)
+                pre = re.findall(r"(?<=:\=).+?(?=;)", rule_action.replace(" ", "").replace("\n", ""), re.S)
+                for j in range(len(temp)):
+                    action[r1.statement.evalVar(temp[j])] = r1.statement.evalVar(pre[j])
+                    self.finalActions.append(action)
+                self.rudic['assign'] = action
+                print(self.rudic)
+
+                action = {}
+                self.finalRules.append(self.rudic)
+                self.rudic = {}
                 vars = []
         return rules
 
 
 class StartState(object):
-    def __init__(self, text, consts, typenames):
+    def __init__(self, text):
         super(StartState, self).__init__()
         init_p1 = r'startstate\s*(?:\".*?\"){0,1}(?:.*?begin){0,1}(.*?)endstartstate\s*;'
         statements = re.findall(init_p1, text, re.S)[0].strip()
         assign = re.findall(r'do\s*(.*?)endfor;\s*', statements, re.S)[0]
         var = re.findall(r'(\w)\s*:\s*\w+', statements, re.S)
-        statements = assign.strip().replace(':','').split(';')
+        statements = Formula(assign.strip().replace(':','')).value.split(';')
         statements.remove('')
         self.value = {}
         self.value["var"] = var
@@ -590,13 +599,14 @@ class Invariant(object):
             formula = Formula(form)
             pds["vars"] = vars
             pds['prop'] = formula.evalVar(formula.value)
+            # print(formula.value,formula.evalVar(formula.value))
             self.value.append(pds)
 
 
 class Protocol(object):
     def __init__(self, name, filename):
         self.name = escape(name)
-        f = open(filename, 'r')
+        f = open('../Protocol/'+filename, 'r')
         self.content = f.read()
         f.close()
         self.evaluate()
@@ -604,7 +614,7 @@ class Protocol(object):
     def evaluate(self):
         types = TypeDef(self.content)
         vardefs = Vardef(self.content, types.typenames,types.recordnames,types.consts)
-        init = StartState(self.content, types.consts, types.typenames)
+        init = StartState(self.content)
         rulesets = RuleSet(self.content)
         invs = Invariant(self.content, types.consts, types.typenames)
         data = {
@@ -615,7 +625,7 @@ class Protocol(object):
             'rules':rulesets.finalRules,
             'invs': invs.value
         }
-        with open(self.name+'.json','w') as f:
+        with open('../Protocol/'+self.name+'.json','w') as f:
             json.dump(data,f,indent=4)
 
 

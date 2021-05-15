@@ -9,16 +9,17 @@ grammar = r"""
         | "true" -> true
         | "false" -> false 
         
-    ?var: WORD  [("_" WORD)*|(SIGNED_NUMBER "_" WORD)* ] -> var
-    
+    ?var: WORD  [("_" WORD)*|(SIGNED_NUMBER "_" WORD)* | ] -> var
+    ?var1 : var WORD -> var1 
     //?paramr : WORD -> paramref
          
     ?expression:  const -> econst
-        | var WORD -> evar
+        | WORD -> econst
+        | var1 -> evar
         | "if" formula "then" expression "else" expression -> eite
-        //| paramr -> eparam
+//        | (WORD WORD) -> eparamr
         
-    ?statement: "'" var "'" ":"  "'" expression "'" -> sassign
+    ?statement: "'" expression "'" ":"  "'" expression "'" -> sassign
         | statement "," statement -> sparallel
     
     ?state: WORD -> intc
@@ -31,9 +32,12 @@ grammar = r"""
         | formula "|" formula -> forlist
         | formula "->" formula -> fimply
         
-    ?rule: "{" "'"  "var" "'" ":" "'" WORD "'" "," "'guard'" ":" "'"  formula "'" "," "'assign'"  ":" "{" statement "}" "}" ->  rule
+    ?rule: "{" "'" "name':" "'" WORD "'" "," "'" "var" "'" ":" "\"" "[" datalist "]" "\"" "," "'guard'" ":" "'"  formula "'" "," "'assign'"  ":" "{" statement "}" "}" ->  rule
     
     ?prop: "{" "'" "vars" "'" ":"  "[" datalist "]"  "," "'prop':" "'" formula  "'" "}"-> prop
+    
+    ?init: "{" "'" "var" "'" ":"  "[" datalist "]"  "," "'guard':" "'" formula  "'" "}"-> startstate
+    
     
     int : SIGNED_NUMBER
     string : ESCAPED_STRING
@@ -78,14 +82,23 @@ class ParaverifierTransformer(Transformer):
     def vardef(self,arn,tyn,*args):
         return Vardef(arn,args,tyn)
 
-    def var(self,n,*args):
-        return Var(n,args)
+    def var(self,*args):
+        # print('var:',args[0])
+        return Var(args[0])
+
+    def var1(self,*args):
+        # print('var1:',args)
+        return EVar(args[0], args[1])
+
+    def evar(self,*args):
+        # print('evar:',args)
+        return args[0]
 
     def econst(self,context):
         return EConst(context)
 
-    def evar(self,var):
-        return EVar(var)
+    # def eword(self,*args):
+    #     return EVar(args[0],args[1])
 
     def eparamr(self,p):
         return EParamr(p)
@@ -105,8 +118,9 @@ class ParaverifierTransformer(Transformer):
     def fuip(self,e1,e2):
         return FUip(e1,e2)
 
-    def feqn(self,e1,e2):
-        return FEqn(e1,e2)
+    def feqn(self,*args):
+        # print(args)
+        return FEqn(args[0], args[1])
 
     def fneg(self,f):
         return FNeg(f)
@@ -133,11 +147,16 @@ class ParaverifierTransformer(Transformer):
         return SParallel(args)
 
     def rule(self,*args):
-        args1=str(args[0])
-        return Rule(args[1],args[2],args1)
+        # print(args)
+        # args1=str(args[0])
+        return Rule(args[0],args[2],args[3],args[1])
 
     def prop(self,*args):
+        # print(args)
         return Prop(args[1],args[0])
+
+    def startstate(self,*args):
+        return StartState(args[1],args[0])
 
     def datalist(self,*args):
         result = []
@@ -145,11 +164,11 @@ class ParaverifierTransformer(Transformer):
             result.append(str(args[i]))
         return result
 
+
 def get_parser_for(start):
     return Lark(grammar, start=start, parser="lalr", transformer=ParaverifierTransformer())
 
-# type_parser = get_parser_for("type")
-# states_parser = get_parser_for("states")
+
 const_parser = get_parser_for('const')
 vars_parser = get_parser_for("var")
 # param_parse = get_parser_for('paramr')
@@ -161,6 +180,7 @@ rule_parser = get_parser_for('rule')
 prop_parser = get_parser_for('prop')
 # rule_parser = get_parser_for("rule")
 # prop_parser = get_parser_for("prop")
+init_parser = get_parser_for('init')
 
 def parse_const(s):
     """Parse a type."""
@@ -198,6 +218,9 @@ def parse_prop(s):
     T = prop_parser.parse(s)
     return T
 
+def parse_init(s):
+    T = init_parser.parse(s)
+    return T
 
 if __name__ == '__main__':
     text3 = r'I'
@@ -207,9 +230,9 @@ if __name__ == '__main__':
     text1 = r"{'vars': ['i', 'j'], 'prop': '~ (n i = C & n j = C)'}"
     text2 = r"{'var': 'k', 'guard': 'n[k] = I', 'assign': {'n[k]': 'T'}}"
     assign = r"'n k': 'T'"
-    prop = r"{'vars': ['i', 'j'], 'prop': '~ (n i = C & n j = C)'}"
-    rule = r"{'var': 'k', 'guard': 'n k = T & x = true', 'assign': {'n k': 'C', 'x': 'false'}}"
-    # print(parse_prop(text).getArgs())
+    prop = r"{'vars': ['i', 'j'], 'prop': '~ (n i  = C & n j  = C)'}"
+    # rule = r"{'name': 'Idle','var': "['i']", 'guard': 'n i  = E','assign': {'n i ': 'I','x': 'true'}}"
+    print(parse_prop(prop))
     # print(parse_rule(text2).getArgs()[0])
     # print(parse_rule(rule))
     # print(parse_statement(assign))

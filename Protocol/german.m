@@ -57,8 +57,7 @@ endrule; endruleset;
 ruleset i : NODE do rule "RecvReqS"
   CurCmd = Empty & Chan1[i].Cmd = ReqS
 ==> begin
-  CurCmd := ReqS; CurPtr := i; Chan1[i].Cmd := Empty;
-  for j : NODE do InvSet[j] := ShrSet[j]; end;
+  CurCmd := ReqS; CurPtr := i; Chan1[i].Cmd := Empty; InvSet[j] := ShrSet[j];
 endrule; endruleset;
 
 ruleset i : NODE ;j : NODE do rule "RecvReqE"

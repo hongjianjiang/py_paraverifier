@@ -121,18 +121,11 @@ class Vardef():
 
 
 class Var():
-    def __init__(self, name, *args):
+    def __init__(self, name):
         self.name = name 
-        self.indexs = args
 
     def __str__(self):
-        str1 = ""
-        if len(self.indexs[0]) > 0:
-            for i in self.indexs[0]:
-                str1+=self.name+"["+str(i)+"]"
-        else:
-            str1 = self.name
-        return str1
+        return self.name
 
 
 class Exp():
@@ -212,7 +205,6 @@ class Formula():
         pass
 
 
-
 class EConst(Exp):
     '''
     Expression of Const
@@ -230,13 +222,14 @@ class EVar(Exp):
     '''
     Expression of Var
     '''
-    def __init__(self, var):
+    def __init__(self, var, index):
         self.ty = Exp.VAR
         self.var = var 
-        self.vars = [str(var)]
+        self.vars = [str(var)+ " " + str(index)]
+        self.index = index
 
     def __str__(self):
-        return str(self.var)
+        return str(self.var) + " " +  str(self.index)
 
 
 class EParamr(Exp):
@@ -507,14 +500,14 @@ class Rule():
     '''
     rule definition
     '''
-    def __init__(self,formula,statement,*args):
-        # self.name = name
+    def __init__(self,name,formula,statement,*args):
+        self.name = name
         self.formula = formula 
         self.statement = statement
         self.params = args
 
     def __str__(self):
-        return "rule " +"".join([str(i) for i in self.params]) +"\nguard: " + str(self.formula) + "\naction: "+ str(self.statement)+"\n}"
+        return "rule " + self.name + "\nparams:"+"".join([str(i) for i in self.params]) +"\nguard: " + str(self.formula) + "\naction: "+ str(self.statement)+"\n}"
 
     def getStatement(self):
         return self.statement
@@ -545,22 +538,35 @@ class Prop():
     def getArgs(self):
         return self.params
 
+
+class StartState():
+    def __init__(self,formula,*args):
+        self.formula = formula
+        self.params = args
+
+    def __str__(self):
+        return "init:{\nparams:"+ "".join([str(i) for i in self.params]) + "\nformula:" + str(self.formula)+"\n}"
+
+    def getFormula(self):
+        return str(self.formula)
+
+
 if __name__ == '__main__':
     print("test1:",Intc(1))
     print("test2",Strc("abc"))
     print("test3:",Boolc("True"))
     print("test4:",Paramdef("i","State"))
-    print("test5:",Var("n",[1]))
+    print("test5:",Var("n"))
     print("test6:", EConst(Boolc("True")))
     print(EConst(Boolc("True")).getVars())
-    print("test7:",EVar(Var("n",[1,2,3,4])))
-    print(EVar(Var("n",[1])).getVars())
+    print("test7:",EVar(Var("n"),1))
+    print(EVar(Var("n"),1).getVars())
     print("test8:",EParamr(Paramdef("i","State")))
     print("test9:",FChaos())
     print("test10:",FMiracle())
-    print("test11:",EIte(FMiracle(),EVar(Var("n",[1,2,3,4])),EVar(Var("n",[1,2,3,4]))))
-    print(EIte(FMiracle(),EVar(Var("n",[1])),EVar(Var("n",[1,2,3,4]))).getVars())
-    print("test12:",FEqn(EVar(Var("Name",[])),EConst(Strc("I"))))
+    print("test11:",EIte(FMiracle(),EVar(Var("n"),1),EVar(Var("n"),1)))
+    print(EIte(FMiracle(),EVar(Var("n"),1),EVar(Var("n"),1)).getVars())
+    print("test12:",FEqn,EVar(Var("n"),1),EConst(Strc("I")))
     print(FEqn(EVar(Var("N",[1])),EConst(Strc("I"))).getVars())
     print(EVar(Var("N",[1])).getVars())
     print(EVar(Var("N",[1])).getVars() == FEqn(EVar(Var("N",[1])),EConst(Strc("I"))).getVars())

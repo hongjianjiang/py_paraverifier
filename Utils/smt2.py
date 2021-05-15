@@ -17,27 +17,38 @@ class SMT2(object):
         super(SMT2, self).__init__()
         self.file = file
 
-    def getStringInFormula(self,formula):
+    def getStringInFormula(self, formula):
+        '''
+        :param formula: ~( a = b & b=c )
+        :return: a = b & b = c
+        '''
         result = re.findall(r'[(](.*)[)]', formula, re.S)
         return result[0]
 
-    def getStringVarinFormula(self,formula):
-        result = re.findall(r'[\[](.*)[\]]', formula, re.S)
-        return result[0]
+    # def getStringVarinFormula(self,formula):
+    #     result = re.findall(r'[\[](.*)[\]]', formula, re.S)
+    #     return result[0]
 
-    def getPrefixInArray(self,formula):
-        if '[' in formula:
-            result = re.findall(r"(.*?)\[.*\]+", formula, re.S)
-            res = result[0]
+    def getStringVarinFormula(self, formula):
+        '''
+        :param formula: n i = C & n j = C
+        :return: [i,j]
+        '''
+        result = re.findall(r'\w*\s{1}(\w*)\s*', formula, re.S)
+        return result
+
+    def getPrefixInArray(self, formula):
+        if " " in formula:
+            result = re.findall(r'(\w*)\s{1}\w*\s*', formula, re.S)
+            return result
         else:
-            res= formula
-        return res
+            return formula
 
-    def getEqualFirst(self,formula):
-        result = re.findall(r'.+?(?==)',formula,re.S)
+    def getEqualFirst(self, formula):
+        result = re.findall(r'.+?(?==)', formula, re.S)
         return result[0]
 
-    def getEqualSecond(self,formula):
+    def getEqualSecond(self, formula):
         result = re.findall(r'(?<==).+', formula, re.S)
         return result[0]
 
@@ -63,29 +74,30 @@ class SMT2(object):
         str_formula = " (assert ("
         if '&' in nsf:
             str_formula += 'and'
-            if '[' in nsf:
-                str_context += ' (declare-const i Int) (declare-const j Int)'
-            for i in (nsf.replace(' ', '').split('&')):
-                l1 = i.split('=')
+            for i in (nsf.split('&')):
+                l1 = i.strip().split('=')
+                for id in l1:
+                    if len(self.getStringVarinFormula(id)) > 0:
+                        for i in self.getStringVarinFormula(id):
+                            str_context += ' (declare-const %s Int)' % i
                 str_formula +=' (='
                 for j in l1:
                     if j in states:
                         str_formula += " " + j
                     elif j in boollist:
                         str_formula += " " + j.lower()
-                    elif self.getPrefixInArray(j) in vars:
-                        if j.count('[') > 0:
-                            vars1 = self.getStringVarinFormula(j)
-                            str_formula += " (select "+self.getPrefixInArray(j) + " " + vars1 +')'
+                    elif self.getPrefixInArray(j)[0] in vars:
+                        if j.count(' ') > 0:
+                            vars1 = self.getStringVarinFormula(j)[0]
+                            str_formula += " (select "+self.getPrefixInArray(j)[0] + " " + vars1 +')'
                         else:
                             str_formula += " "+j
                 str_formula += ')'
             str_formula += '))'
         else:
-            if '[' in nsf:
-                str_context += ' (declare-const i Int)'
-            for i in (nsf.replace(' ', '').split('&')):
-                print(i)
+            if len(self.getStringVarinFormula(nsf)) > 0:
+                str_context += ' (declare-const %s Int)' % (self.getStringVarinFormula(nsf)[0])
+            for i in (nsf.split('&')):
                 l1 = i.split('=')
                 str_formula += '='
                 for j in l1:
@@ -93,26 +105,26 @@ class SMT2(object):
                         str_formula += " " + j
                     elif j in boollist:
                         str_formula += " " + j.lower()
-                    elif self.getPrefixInArray(j) in vars:
-                        if j.count('[') > 0:
-                            str_formula += " (select " + self.getPrefixInArray(j) + ' i)'
+                    elif self.getPrefixInArray(j)[0] in vars:
+                        if j.count(' ') > 0:
+                            str_formula += " (select " + self.getPrefixInArray(j)[0] + ' i)'
                         else:
                             str_formula += " " + j
                 str_formula += ')'
             str_formula += ')'
-        # print(str_context+str_formula)
+        # print(str_formula)
+        print(str_context+str_formula)
         s.from_string(str_context+str_formula)
-        if str(s.check())=="sat":
+        if str(s.check()) == "sat":
             print(s.model())
 
         return str(s.check())
 
 
 if __name__ == '__main__':
-    smt2 = SMT2('../Protocol/n_mutualEx.json')
-    print(smt2.check("~(x=True & T=C)"))
-    # print(smt2.check('~(n[i]=C & n[j]=C)'))
-    #
+    smt2 = SMT2('../Protocol/n_mutual.json')
+    # print(smt2.check("~(x=True & n j=T)"))
+    print(smt2.check('~(n i =C)'))
     # s= Solver()
     # s.from_string("(declare-datatypes () ((state I T C E))) (declare-const n (Array Int state)) (declare-const x Bool) (declare-const i Int) (declare-const j Int) (assert (and (= (select n i ) C) (= (select n j) C) (not (= i j)) ))")
     # print(s.check())

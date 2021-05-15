@@ -4,7 +4,7 @@ import os
 from Utils.invHold import *
 from Utils.parse import *
 from Utils.smt2 import *
-file = '../Protocol/n_mutualEx.json'
+file = '../Protocol/n_mutual.json'
 
 
 class ParaSystem():
@@ -14,6 +14,7 @@ class ParaSystem():
     states: list of states, assumed to be distinct.
     rules: list of rules.
     invs: list of invariants.
+    init: initial state.
     """
     def __init__(self, name, vars, states, rules, invs, init):
         self.name = name
@@ -39,6 +40,11 @@ class ParaSystem():
         res = "Variables: " + ", ".join(v.name for v in self.vars) + "\n"
 
         res += "States: " + ", ".join(str(v) for v in self.states) + "\n"
+
+        res += "Initial States: \n"
+        for i, inv in enumerate(self.init):
+            inv_term = inv
+            res += "%d: %s" % (i, str(inv_term)) + "\n"
 
         res += "Number of rules: %d\n" % len(self.rules)
         for i, rule in enumerate(self.rules):
@@ -67,9 +73,11 @@ class ParaSystem():
                     if invHoldForCondition3(r.getGuard(),weakestprecondition(statement,parse_form(inv))) not in newInv:
                         newStr = invHoldForCondition3(r.getGuard(),weakestprecondition(statement,parse_form(inv)))
                         temp = self.smt2.getStringInFormula(newStr)
-                        formula_list = temp.replace(" ","").split('&')
+                        formula_list = temp.split('&')
                         for f in formula_list:
-                            if self.smt2.getEqualFirst(f)==self.smt2.getEqualSecond(f):
+                            # print('test1:',self.smt2.getEqualFirst(f).strip()==self.smt2.getEqualSecond(f).strip(),self.smt2.getEqualFirst(f),self.smt2.getEqualSecond(f))
+                            if self.smt2.getEqualFirst(f).strip()==self.smt2.getEqualSecond(f).strip():
+                                print('test2')
                                 formula_list.remove(f)
                         newStr = '~('+" & ".join(formula_list)+')'
                         newInv.append(newStr)
@@ -87,8 +95,8 @@ class ParaSystem():
 
 def load_system(filename):
     dn = os.path.dirname(os.getcwd())
-    # with open(os.path.join(dn, 'Protocol/' + filename+'.json'), encoding='utf-8') as a:
-    with open(filename, encoding='utf-8') as a:
+    with open(os.path.join(dn, 'Protocol/' + filename), encoding='utf-8') as a:
+    # with open(filename, encoding='utf-8') as a:
         data = json.load(a)
     name = data['name']
     vars = []
@@ -102,7 +110,6 @@ def load_system(filename):
     rules = []
     invs = []
     for inv in data['invs']:
-        print(str(inv))
         T = parse_prop(str(inv))
         for new in T.getArgs()[0]:
             for r in data['rules']:
@@ -129,13 +136,18 @@ def load_system(filename):
         invs.append(T)
     inits = []
     init = data['init']
-    for i in init:
-        print(i['assign'])
-    return ParaSystem(name, vars, states, rules, invs, init)
+    # print(init)
+    T = parse_init(str(init))
+    inits.append(T)
+    # print(ParaSystem(name, vars, states, rules, invs, inits))
+    return ParaSystem(name, vars, states, rules, invs, inits)
 
 
 if __name__ == '__main__':
     p = load_system('n_mutual.json')
-    # p.add_invariant_prop()
-    # print("new inv:", p.search_invariant())
+    p.add_invariant_prop()
+    print(p.allinvs)
+    print("new inv:", p.search_invariant())
+    # for i in p.init:
+    #     print(i.getFormula())
 

@@ -12,6 +12,7 @@ python2 gen.py -m mutualEx.m <br>
 2021/4/27 实现parse模块,将协议转化到type<br>
 2021/5/11 gen修改支持多重变量定义<br>
 2021/5/12 translation翻译german协议<br>
+2021/5/15 全局文件修改（types加入init，对应修改paraverifier、z3、invhold等文件）<br>
 
 Directory Structure:
 ---

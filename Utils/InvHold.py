@@ -12,11 +12,8 @@ def weakestprecondition(statement, formula):
     :param formula: given invariant formula
     :return: the string of the weakest precondtion
     '''
-    resultFormula = FChaos()    #judge the type of the given statement
     varsInformula = formula.getVars()
     if statement.isAssign():        #single assign condition
-        print(statement)
-        print('assign')
         var = statement.getVar()
         exp = statement.getExp()
         if not str(var) in varsInformula: #assignment has no affection on formula
@@ -30,7 +27,6 @@ def weakestprecondition(statement, formula):
         for i,v in enumerate(vars):
             if v in varsInformula:
                 resultFormula = resultFormula.replace(v,exps[i])
-                print(resultFormula)
             else:
                 pass
     return resultFormula
@@ -74,19 +70,19 @@ def invHoldForCondition3(guard, formula):
 
 
 if __name__ == '__main__':
-    statement = SAssign(Var("n",['k']),EVar("C"))
-    print(statement.isAssign())
-    statement1 = SAssign("x",FChaos())
-    formula = FNeg(FAndlist([FEqn(EVar(Var("n",['i'])),EConst(Strc("C"))),FEqn(EVar(Var("n",['j'])),EConst(Strc("C")))]))
-    statement2 = SParallel([statement, statement1])
-    print(statement2.isAssign())
+    statement = SAssign(EVar(Var("n"),'i'),EConst(Var("T")))
+    # print(statement.isAssign())
+    # statement1 = SAssign("x",FChaos())
+    formula = FNeg(FAndlist([FEqn(EVar(Var("n"),'i'),EConst(Strc("C"))),FEqn(EVar(Var("n"),'j'),EConst(Strc("C")))]))
+    # statement2 = SParallel([statement, statement1])
+    # print(statement2.isAssign())
     wp = weakestprecondition(statement,formula)
-    guard = FAndlist([FEqn(EVar(Var("n",['i'])),EConst(Strc("T"))),FEqn(EVar(Var("x",[])),EConst(Boolc("True")))])
+    # guard = FAndlist([FEqn(EVar(Var("n",['i'])),EConst(Strc("T"))),FEqn(EVar(Var("x",[])),EConst(Boolc("True")))])
     # print(guard)
     # print(statement2)
     print(wp)
     # try_assign = SAssign(Var("n",['i']),EVar("T"))
     # wp1 = weakestprecondition(try_assign,formula)
     # print(wp1)
-    invHoldCondition(statement, formula,'../Protocol/n_mutualEx.json')
+    # invHoldCondition(statement, formula,'../Protocol/n_mutualEx.json')
     # print(invHoldForCondition3(guard,wp))
