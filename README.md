@@ -14,6 +14,16 @@ python2 gen.py -m mutualEx.m <br>
 2021/5/12 translation翻译german协议<br>
 2021/5/15 全局文件修改（types加入init，对应修改paraverifier、z3、invhold等文件）<br>
 
+Reward Setting Strategy
+---
+Setting a global invariant set to store the founded invariant.<br>
+When the invariant and the guarded command meets the invhold1/invhold3, the reward is postive.<br>
+When the literal of original invariant occures on the invariant, the reward is also positive.<br>
+When the initial condition satisfies the invariant, the reward is position, otherwise is negative.<br>
+When the guard of guarded commands can straightly imply the invariant, the reward is positive.<br>
+
+
+
 Directory Structure:
 ---
 - Protocol stores the ocaml files of parameterized protocol<br>
