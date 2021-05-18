@@ -13,7 +13,7 @@ python2 gen.py -m mutualEx.m <br>
 2021/5/11 gen修改支持多重变量定义<br>
 2021/5/12 translation翻译german协议<br>
 2021/5/15 全局文件修改（types加入init，对应修改paraverifier、z3、invhold等文件）<br>
-
+2021/5/18 修改formulaenv文件，支持invhold1-3的判定，未完成init和guard判定<br>
 Reward Setting Strategy
 ---
 Setting a global invariant set to store the founded invariant.<br>
