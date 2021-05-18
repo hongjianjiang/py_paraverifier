@@ -47,7 +47,7 @@ class FormulaEnv(gym.Env):
         self.CNF = result[0]
         self.formula = formula
         self.action_space = self.CNF.split('&')
-        self.observation_space = ["sat","unsat"]
+        self.observation_space = ["sat", "unsat"]
         self.seed()
         self.viewer = None
         self.state = None

@@ -212,7 +212,7 @@ class EConst(Exp):
     def __init__(self,context):
         self.ty = Exp.CONST
         self.context = context
-        self.vars = []
+        self.vars = [context]
 
     def __str__(self):
         return str(self.context)
@@ -514,6 +514,9 @@ class Rule():
 
     def getGuard(self):
         return self.formula
+
+    def getName(self):
+        return self.name
 
     def getArgs(self):
         return self.params

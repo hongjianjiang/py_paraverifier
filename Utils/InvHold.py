@@ -43,15 +43,11 @@ def invHoldCondition(statement, formula, file):
     # print("assign:", statement,"\ninv:", formula)
     # print(wp,statement,formula)
     if smt2.check(wp) == "unsat":
-        print("invHold for case 1")
         flag = 1
     elif str(wp) == str(formula):
-        print("invHold for case 2")
         flag = 2
     else:
-        print("invHold for case 3")
         flag = 3
-    print('====================================')
     return flag
 
 
@@ -62,7 +58,10 @@ def invHoldForCondition3(guard, formula):
     :return: the disconjunction of the guard and the formula
     '''
     negg = FNeg(guard)
-    guard_str=re.findall(r'[(](.*)[)]', str(negg), re.S)
+    if '(' in str(guard):
+        guard_str=re.findall(r'[(](.*)[)]', str(negg), re.S)
+    else:
+        guard_str=[str(guard)]
     formula_str=re.findall(r'[(](.*)[)]', str(formula), re.S)
     guard_str.append(formula_str[0])
     result = " & ".join(guard_str)
@@ -70,19 +69,9 @@ def invHoldForCondition3(guard, formula):
 
 
 if __name__ == '__main__':
-    statement = SAssign(EVar(Var("n"),'i'),EConst(Var("T")))
-    # print(statement.isAssign())
-    # statement1 = SAssign("x",FChaos())
-    formula = FNeg(FAndlist([FEqn(EVar(Var("n"),'i'),EConst(Strc("C"))),FEqn(EVar(Var("n"),'j'),EConst(Strc("C")))]))
-    # statement2 = SParallel([statement, statement1])
-    # print(statement2.isAssign())
-    wp = weakestprecondition(statement,formula)
-    # guard = FAndlist([FEqn(EVar(Var("n",['i'])),EConst(Strc("T"))),FEqn(EVar(Var("x",[])),EConst(Boolc("True")))])
-    # print(guard)
-    # print(statement2)
-    print(wp)
-    # try_assign = SAssign(Var("n",['i']),EVar("T"))
-    # wp1 = weakestprecondition(try_assign,formula)
-    # print(wp1)
-    # invHoldCondition(statement, formula,'../Protocol/n_mutualEx.json')
-    # print(invHoldForCondition3(guard,wp))
+    statement = SAssign(EVar(Var("n"),'j'),EConst(Var("I")))
+    statement1 = SAssign(EConst(Strc("x")),FChaos())
+    formula = FNeg(FAndlist([FEqn(EVar(Var("n"),'i'),EConst(Strc("C"))),FEqn(EConst(Strc("x")),EConst(Boolc("True")))]))
+    statement2 = SParallel([statement, statement1])
+    wp = weakestprecondition(statement2,formula)
+    # print(invHoldForCondition3(FEqn(EVar(Var("n"),"j"),EConst(Strc("E")))),wp)

@@ -113,10 +113,9 @@ class SMT2(object):
                 str_formula += ')'
             str_formula += ')'
         # print(str_formula)
-        print(str_context+str_formula)
         s.from_string(str_context+str_formula)
-        if str(s.check()) == "sat":
-            print(s.model())
+        # if str(s.check()) == "sat":
+        #     print(s.model())
 
         return str(s.check())
 
