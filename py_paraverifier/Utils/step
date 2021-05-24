@@ -1,0 +1,401 @@
+Help on package gym:
+
+NNAAMMEE
+    gym
+
+PPAACCKKAAGGEE  CCOONNTTEENNTTSS
+    core
+    envs (package)
+    error
+    logger
+    spaces (package)
+    utils (package)
+    vector (package)
+    version
+    wrappers (package)
+
+CCLLAASSSSEESS
+    builtins.object
+        gym.core.Env
+            gym.core.Wrapper
+        gym.spaces.space.Space
+    
+    class EEnnvv(builtins.object)
+     |  The main OpenAI Gym class. It encapsulates an environment with
+     |  arbitrary behind-the-scenes dynamics. An environment can be
+     |  partially or fully observed.
+     |  
+     |  The main API methods that users of this class need to know are:
+     |  
+     |      step
+     |      reset
+     |      render
+     |      close
+     |      seed
+     |  
+     |  And set the following attributes:
+     |  
+     |      action_space: The Space object corresponding to valid actions
+     |      observation_space: The Space object corresponding to valid observations
+     |      reward_range: A tuple corresponding to the min and max possible rewards
+     |  
+     |  Note: a default reward range set to [-inf,+inf] already exists. Set it if you want a narrower range.
+     |  
+     |  The methods are accessed publicly as "step", "reset", etc...
+     |  
+     |  Methods defined here:
+     |  
+     |  ____eenntteerr____(self)
+     |      Support with-statement for the environment.
+     |  
+     |  ____eexxiitt____(self, *args)
+     |      Support with-statement for the environment.
+     |  
+     |  ____ssttrr____(self)
+     |      Return str(self).
+     |  
+     |  cclloossee(self)
+     |      Override close in your subclass to perform any necessary cleanup.
+     |      
+     |      Environments will automatically close() themselves when
+     |      garbage collected or when the program exits.
+     |  
+     |  rreennddeerr(self, mode='human')
+     |      Renders the environment.
+     |      
+     |      The set of supported modes varies per environment. (And some
+     |      environments do not support rendering at all.) By convention,
+     |      if mode is:
+     |      
+     |      - human: render to the current display or terminal and
+     |        return nothing. Usually for human consumption.
+     |      - rgb_array: Return an numpy.ndarray with shape (x, y, 3),
+     |        representing RGB values for an x-by-y pixel image, suitable
+     |        for turning into a video.
+     |      - ansi: Return a string (str) or StringIO.StringIO containing a
+     |        terminal-style text representation. The text can include newlines
+     |        and ANSI escape sequences (e.g. for colors).
+     |      
+     |      Note:
+     |          Make sure that your class's metadata 'render.modes' key includes
+     |            the list of supported modes. It's recommended to call super()
+     |            in implementations to use the functionality of this method.
+     |      
+     |      Args:
+     |          mode (str): the mode to render with
+     |      
+     |      Example:
+     |      
+     |      class MyEnv(Env):
+     |          metadata = {'render.modes': ['human', 'rgb_array']}
+     |      
+     |          def render(self, mode='human'):
+     |              if mode == 'rgb_array':
+     |                  return np.array(...) # return RGB frame suitable for video
+     |              elif mode == 'human':
+     |                  ... # pop up a window and render
+     |              else:
+     |                  super(MyEnv, self).render(mode=mode) # just raise an exception
+     |  
+     |  rreesseett(self)
+     |      Resets the environment to an initial state and returns an initial
+     |      observation.
+     |      
+     |      Note that this function should not reset the environment's random
+     |      number generator(s); random variables in the environment's state should
+     |      be sampled independently between multiple calls to `reset()`. In other
+     |      words, each call of `reset()` should yield an environment suitable for
+     |      a new episode, independent of previous episodes.
+     |      
+     |      Returns:
+     |          observation (object): the initial observation.
+     |  
+     |  sseeeedd(self, seed=None)
+     |      Sets the seed for this env's random number generator(s).
+     |      
+     |      Note:
+     |          Some environments use multiple pseudorandom number generators.
+     |          We want to capture all such seeds used in order to ensure that
+     |          there aren't accidental correlations between multiple generators.
+     |      
+     |      Returns:
+     |          list<bigint>: Returns the list of seeds used in this env's random
+     |            number generators. The first value in the list should be the
+     |            "main" seed, or the value which a reproducer should pass to
+     |            'seed'. Often, the main seed equals the provided 'seed', but
+     |            this won't be true if seed=None, for example.
+     |  
+     |  sstteepp(self, action)
+     |      Run one timestep of the environment's dynamics. When end of
+     |      episode is reached, you are responsible for calling `reset()`
+     |      to reset this environment's state.
+     |      
+     |      Accepts an action and returns a tuple (observation, reward, done, info).
+     |      
+     |      Args:
+     |          action (object): an action provided by the agent
+     |      
+     |      Returns:
+     |          observation (object): agent's observation of the current environment
+     |          reward (float) : amount of reward returned after previous action
+     |          done (bool): whether the episode has ended, in which case further step() calls will return undefined results
+     |          info (dict): contains auxiliary diagnostic information (helpful for debugging, and sometimes learning)
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors defined here:
+     |  
+     |  ____ddiicctt____
+     |      dictionary for instance variables (if defined)
+     |  
+     |  ____wweeaakkrreeff____
+     |      list of weak references to the object (if defined)
+     |  
+     |  uunnwwrraappppeedd
+     |      Completely unwrap this env.
+     |      
+     |      Returns:
+     |          gym.Env: The base non-wrapped gym.Env instance
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes defined here:
+     |  
+     |  aaccttiioonn__ssppaaccee = None
+     |  
+     |  mmeettaaddaattaa = {'render.modes': []}
+     |  
+     |  oobbsseerrvvaattiioonn__ssppaaccee = None
+     |  
+     |  rreewwaarrdd__rraannggee = (-inf, inf)
+     |  
+     |  ssppeecc = None
+    
+    class SSppaaccee(builtins.object)
+     |  Defines the observation and action spaces, so you can write generic
+     |  code that applies to any Env. For example, you can choose a random
+     |  action.
+     |  
+     |  WARNING - Custom observation & action spaces can inherit from the `Space`
+     |  class. However, most use-cases should be covered by the existing space
+     |  classes (e.g. `Box`, `Discrete`, etc...), and container classes (`Tuple` &
+     |  `Dict`). Note that parametrized probability distributions (through the
+     |  `sample()` method), and batching functions (in `gym.vector.VectorEnv`), are
+     |  only well-defined for instances of spaces provided in gym by default.
+     |  Moreover, some implementations of Reinforcement Learning algorithms might
+     |  not handle custom spaces properly. Use custom spaces with care.
+     |  
+     |  Methods defined here:
+     |  
+     |  ____ccoonnttaaiinnss____(self, x)
+     |  
+     |  ____iinniitt____(self, shape=None, dtype=None)
+     |      Initialize self.  See help(type(self)) for accurate signature.
+     |  
+     |  ccoonnttaaiinnss(self, x)
+     |      Return boolean specifying if x is a valid
+     |      member of this space
+     |  
+     |  ffrroomm__jjssoonnaabbllee(self, sample_n)
+     |      Convert a JSONable data type to a batch of samples from this space.
+     |  
+     |  ssaammppllee(self)
+     |      Randomly sample an element of this space. Can be 
+     |      uniform or non-uniform sampling based on boundedness of space.
+     |  
+     |  sseeeedd(self, seed=None)
+     |      Seed the PRNG of this space.
+     |  
+     |  ttoo__jjssoonnaabbllee(self, sample_n)
+     |      Convert a batch of samples from this space to a JSONable data type.
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors defined here:
+     |  
+     |  ____ddiicctt____
+     |      dictionary for instance variables (if defined)
+     |  
+     |  ____wweeaakkrreeff____
+     |      list of weak references to the object (if defined)
+     |  
+     |  nnpp__rraannddoomm
+     |      Lazily seed the rng since this is expensive and only needed if
+     |      sampling from this space.
+    
+    class WWrraappppeerr(Env)
+     |  Wraps the environment to allow a modular transformation.
+     |  
+     |  This class is the base class for all wrappers. The subclass could override
+     |  some methods to change the behavior of the original environment without touching the
+     |  original code.
+     |  
+     |  .. note::
+     |  
+     |      Don't forget to call ``super().__init__(env)`` if the subclass overrides :meth:`__init__`.
+     |  
+     |  Method resolution order:
+     |      Wrapper
+     |      Env
+     |      builtins.object
+     |  
+     |  Methods defined here:
+     |  
+     |  ____ggeettaattttrr____(self, name)
+     |  
+     |  ____iinniitt____(self, env)
+     |      Initialize self.  See help(type(self)) for accurate signature.
+     |  
+     |  ____rreepprr____(self)
+     |      Return repr(self).
+     |  
+     |  ____ssttrr____(self)
+     |      Return str(self).
+     |  
+     |  cclloossee(self)
+     |      Override close in your subclass to perform any necessary cleanup.
+     |      
+     |      Environments will automatically close() themselves when
+     |      garbage collected or when the program exits.
+     |  
+     |  ccoommppuuttee__rreewwaarrdd(self, achieved_goal, desired_goal, info)
+     |  
+     |  rreennddeerr(self, mode='human', **kwargs)
+     |      Renders the environment.
+     |      
+     |      The set of supported modes varies per environment. (And some
+     |      environments do not support rendering at all.) By convention,
+     |      if mode is:
+     |      
+     |      - human: render to the current display or terminal and
+     |        return nothing. Usually for human consumption.
+     |      - rgb_array: Return an numpy.ndarray with shape (x, y, 3),
+     |        representing RGB values for an x-by-y pixel image, suitable
+     |        for turning into a video.
+     |      - ansi: Return a string (str) or StringIO.StringIO containing a
+     |        terminal-style text representation. The text can include newlines
+     |        and ANSI escape sequences (e.g. for colors).
+     |      
+     |      Note:
+     |          Make sure that your class's metadata 'render.modes' key includes
+     |            the list of supported modes. It's recommended to call super()
+     |            in implementations to use the functionality of this method.
+     |      
+     |      Args:
+     |          mode (str): the mode to render with
+     |      
+     |      Example:
+     |      
+     |      class MyEnv(Env):
+     |          metadata = {'render.modes': ['human', 'rgb_array']}
+     |      
+     |          def render(self, mode='human'):
+     |              if mode == 'rgb_array':
+     |                  return np.array(...) # return RGB frame suitable for video
+     |              elif mode == 'human':
+     |                  ... # pop up a window and render
+     |              else:
+     |                  super(MyEnv, self).render(mode=mode) # just raise an exception
+     |  
+     |  rreesseett(self, **kwargs)
+     |      Resets the environment to an initial state and returns an initial
+     |      observation.
+     |      
+     |      Note that this function should not reset the environment's random
+     |      number generator(s); random variables in the environment's state should
+     |      be sampled independently between multiple calls to `reset()`. In other
+     |      words, each call of `reset()` should yield an environment suitable for
+     |      a new episode, independent of previous episodes.
+     |      
+     |      Returns:
+     |          observation (object): the initial observation.
+     |  
+     |  sseeeedd(self, seed=None)
+     |      Sets the seed for this env's random number generator(s).
+     |      
+     |      Note:
+     |          Some environments use multiple pseudorandom number generators.
+     |          We want to capture all such seeds used in order to ensure that
+     |          there aren't accidental correlations between multiple generators.
+     |      
+     |      Returns:
+     |          list<bigint>: Returns the list of seeds used in this env's random
+     |            number generators. The first value in the list should be the
+     |            "main" seed, or the value which a reproducer should pass to
+     |            'seed'. Often, the main seed equals the provided 'seed', but
+     |            this won't be true if seed=None, for example.
+     |  
+     |  sstteepp(self, action)
+     |      Run one timestep of the environment's dynamics. When end of
+     |      episode is reached, you are responsible for calling `reset()`
+     |      to reset this environment's state.
+     |      
+     |      Accepts an action and returns a tuple (observation, reward, done, info).
+     |      
+     |      Args:
+     |          action (object): an action provided by the agent
+     |      
+     |      Returns:
+     |          observation (object): agent's observation of the current environment
+     |          reward (float) : amount of reward returned after previous action
+     |          done (bool): whether the episode has ended, in which case further step() calls will return undefined results
+     |          info (dict): contains auxiliary diagnostic information (helpful for debugging, and sometimes learning)
+     |  
+     |  ----------------------------------------------------------------------
+     |  Class methods defined here:
+     |  
+     |  ccllaassss__nnaammee() from builtins.type
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors defined here:
+     |  
+     |  ssppeecc
+     |  
+     |  uunnwwrraappppeedd
+     |      Completely unwrap this env.
+     |      
+     |      Returns:
+     |          gym.Env: The base non-wrapped gym.Env instance
+     |  
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from Env:
+     |  
+     |  ____eenntteerr____(self)
+     |      Support with-statement for the environment.
+     |  
+     |  ____eexxiitt____(self, *args)
+     |      Support with-statement for the environment.
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from Env:
+     |  
+     |  ____ddiicctt____
+     |      dictionary for instance variables (if defined)
+     |  
+     |  ____wweeaakkrreeff____
+     |      list of weak references to the object (if defined)
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes inherited from Env:
+     |  
+     |  aaccttiioonn__ssppaaccee = None
+     |  
+     |  mmeettaaddaattaa = {'render.modes': []}
+     |  
+     |  oobbsseerrvvaattiioonn__ssppaaccee = None
+     |  
+     |  rreewwaarrdd__rraannggee = (-inf, inf)
+
+FFUUNNCCTTIIOONNSS
+    mmaakkee(id, **kwargs)
+    
+    rreeggiisstteerr(id, **kwargs)
+    
+    ssppeecc(id)
+
+DDAATTAA
+    ____aallll____ = ['Env', 'Space', 'Wrapper', 'make', 'spec', 'register']
+
+VVEERRSSIIOONN
+    0.18.3
+
+FFIILLEE
+    /home/sword/miniconda3/envs/deeplearning/lib/python3.6/site-packages/gym/__init__.py
+
