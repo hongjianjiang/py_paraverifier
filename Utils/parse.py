@@ -1,7 +1,7 @@
 # Author: Hongjian Jiang
 
 from lark import Lark, Transformer, v_args, exceptions
-from Utils.type import *
+from type import *
 
 grammar = r"""
     ?const: SIGNED_NUMBER -> intc

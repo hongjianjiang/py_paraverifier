@@ -102,6 +102,7 @@ class Paramref(Paramr):
     def __str__(self):
         return self.name
 
+
 class Paramfix(Paramr):
     def __init__(self, vn, tn, value):
         self.ty = Paramr.PARAMFIX

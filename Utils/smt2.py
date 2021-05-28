@@ -54,6 +54,8 @@ class SMT2(object):
 
     def check(self, smt2_formula):
         s = Solver()
+        if '(' not in smt2_formula:
+            smt2_formula = '~'+smt2_formula.replace('~','(')+')'
         nsf = self.getStringInFormula(smt2_formula).replace("(","").replace(")","") # the negation of the smt2 formula
         with open(self.file) as f:
             data = json.load(f)
@@ -110,7 +112,8 @@ class SMT2(object):
                         str_formula += " " + j.lower()
                     elif self.getPrefixInArray(j)[0] in vars:
                         if j.count(' ') > 0:
-                            str_formula += " (select " + self.getPrefixInArray(j)[0] + ' i)'
+                            vars1 = self.getStringVarinFormula(j)[0]
+                            str_formula += " (select " + self.getPrefixInArray(j)[0] + " " + vars1 + ')'
                         else:
                             str_formula += " " + j
                 str_formula += ')'
@@ -120,17 +123,17 @@ class SMT2(object):
         s.from_string(str_context+str_formula)
         # if str(s.check()) == "sat":
         #     print(s.model())
-
         return str(s.check())
 
 
 if __name__ == '__main__':
     smt2 = SMT2('../Protocol/n_mutual.json')
     # print(smt2.check("~(x=True & n j=T)"))
-    print(smt2.check('~(n i =C)'))
+    # print(smt2.check('~(n i =C)'))
     # s= Solver()
     # s.from_string("(declare-datatypes () ((state I T C E))) (declare-const n (Array Int state)) (declare-const x Bool) (declare-const i Int) (declare-const j Int) (assert (and (= (select n i ) C) (= (select n j) C) (not (= i j)) ))")
     # print(s.check())
     # print(s.model())
     # print(smt2.check("~(n[i]=T & x=True & C=C & n[j]=C)"))
     # print(smt2.check("~(x=True & n[j]=T)"))
+    # print(smt2.getStringInFormula('~(n j=C)'))

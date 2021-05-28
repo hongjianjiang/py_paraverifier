@@ -1,8 +1,8 @@
 #author: Hongjian Jiang
 
 
-from Utils.type import *
-from Utils.smt2 import *
+from type import *
+from smt2 import *
 import re
 
 
@@ -58,11 +58,15 @@ def invHoldForCondition3(guard, formula):
     :return: the disconjunction of the guard and the formula
     '''
     negg = FNeg(guard)
+    if '(' not in str(formula):
+        strform = '('+str(formula).replace('~','')+')'
+    else:
+        strform = str(formula)
     if '(' in str(guard):
         guard_str=re.findall(r'[(](.*)[)]', str(negg), re.S)
     else:
         guard_str=[str(guard)]
-    formula_str=re.findall(r'[(](.*)[)]', str(formula), re.S)
+    formula_str=re.findall(r'[(](.*)[)]', strform, re.S)
     guard_str.append(formula_str[0])
     result = " & ".join(guard_str)
     return "~("+result+")"

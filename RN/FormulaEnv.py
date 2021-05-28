@@ -8,7 +8,9 @@ import numpy as np
 import json
 import re
 from z3 import Solver
-
+from gym.utils.smt2 import  *
+from gym.utils.Paraverifier import  *
+import numpy as np
 
 class FormulaEnv(gym.Env):
     """
@@ -35,145 +37,103 @@ class FormulaEnv(gym.Env):
         ...
         index-1 Choose last literal
     Reward:
-        Reward of 0 is awarded if the agent reached the flag of SAT.
-        Reward of -1 is awarded if the agent reached the flag of UNSAT
+        # Reward of 0 is awarded if the agent reached the flag of SAT.
+        # Reward of -1 is awarded if the agent reached the flag of UNSAT
+        When the invHold3 meet between the formula and the guarded command, the reward set positive
+        When the invHold1 meet between the formula and the guarded command, the reward set positive
+        When the literal occurs in the formula, the reward set positive
+        When the initial satisfies the formula, the reward set positive
+        When the guard of the guarded commands, the reward set negative
+
     Starting State:
         The initial state is the original CNF formula.
+
     Episode Termination:
         The chosed formula is Unsat checked by the SAT solver.
     """
-    def __init__(self,formula,filename):
-        result = re.findall(r'[(](.*)[)]', formula.replace(" ",""), re.S)
-        self.invset = {formula}
-        self.CNF = result[0]
-        self.formula = formula
-        self.action_space = self.CNF.split('&')
-        self.observation_space = ["sat","unsat"]
+    def __init__(self,filename):
+        self.smt2 = SMT2(filename)
+        self.paraverif = load_system(filename)
+        self.formula = self.paraverif.invForm
+        # print(self.formula)
+        self.relation = self.paraverif.relation
+        self.allinvs = self.paraverif.allinvs
+        self.queue = []
+        invs = []
+        for f in self.formula:
+            for f1 in self.paraverif.searchInvFromGivenFormula(f):
+                invs.append(f1)
+                self.queue.append(f1)
+            invs.append(f)
+        len1 = len(self.paraverif.states)*2 + 2
+        low = np.zeros(len1)
+        high = np.ones(len1)
+        self.observation_space = spaces.Box(low,high,dtype=np.float32)
+        self.action_space = spaces.Discrete(self.paraverif.max)
         self.seed()
         self.viewer = None
         self.state = None
-        self.smt2 = SMT2(filename)
+        self.originalInv = []
 
     def seed(self,seed = None):
         self.np_random, seed = seeding.np_random(seed)
         return [seed]
 
-    # Override in SOME subclasses
     def _close(self):
         pass
 
-    # Set these in ALL subclasses
-    action_space = None
-    observation_space = None
+    def step(self, action):
+        reward=0
+        curform = self.queue[0] # ~(n i=T & x=True & n j=C)
+        curfs = re.findall(r'~\((.*)\)', curform, re.S)[0] # n i=T & x=True & n j=C
+        temp = curfs.split('&')
+        curfsl = []
+        for i in temp:
+            curfsl.append(i.strip())
+        if action> len(curfsl)-1:
+            print(curform,'1')
+            form = "~("+ curfs + ")"
+        elif len(curfsl) == 1:
+            print(curform,'2')
+            form = "~("+ curfs + ")"
+            pass
+        else:
+            print(curform,'3')
+            curfsl.remove(curfsl[action])
+            form = "~("+" & ".join(curfsl)+")"
+        print(form)
+        self.queue.remove(self.queue[0])
+        nfs = self.paraverif.searchInvFromGivenFormula(form) # new formulas
+        print('nfs:',nfs)
+        self.queue.append(form)
+        for i in nfs:
+            self.queue.append(i)
+        cinit = self.paraverif.initSatInv(form)
+        if cinit == 'sat': #initial condition satisfies the formula
+            reward -= 10
+        list1 = re.findall(r'[(](.*)[)]', form, re.S)[0].split('&')
+        for l in list1: # keep the original inv
+            if l.strip() in self.originalInv:
+                reward += 3
+        cinv1,cinv3 =  self.paraverif.judgeInv(form) # inv1 & inv3 hold
+        if self.paraverif.judgeGuard2Formula(form): # guard equals to inv
+            reward -= 10
+        reward = reward + cinv1 * 3 + cinv3 * 3
+        formulastr = "".join(self.formula)
+        done = bool(
+            '&' not in formulastr
+        )
+        print('--------')
+        return self.paraverif.transform2onehot(form),reward,done,{}
+        # raise NotImplementedError
 
-    # Override in ALL subclasses
-    def _step(self, action):
-        list1 = self.CNF.split('&')
-        if list1.index(action) == 0 :
-            self.formula ="~("+"&".join(list1[1:])+")"
-            self.action_space.remove(action)
-        else:
-            if action in list1:
-                list1.remove(action)
-                self.formula = "~("+"&".join(list1)+")"
-                self.action_space.remove(action)
-                print(self.formula)
-        obs =  self.smt2.check(self.formula)
-        if obs == "unsat":
-            reward = -1
-        else:
-            reward = 0
-        done = False
-        return obs,reward,done,{}
-        # raise NotImplementedError
-    def _reset(self): 
-        print("orignial formula :" , self.formula)
-        # raise NotImplementedError
+    def reset(self):
+        # print("reset :" , self.formula)
+        print('===========')
+        return self.paraverif.transform2onehot(self.formula[0])
+
     def _render(self, mode='human', close=False): return
+
     def _seed(self, seed=None): return []
 
 
-class SMT2(object):
-    '''
-    Given the protocol's json file address and the invariant
-    Json file servers as the context of the z3 environment
-    Invariant servers as the assertation
-    SMT2 returns the bool value whether it is true or not
-    '''
-    def __init__(self, file):
-        super(SMT2, self).__init__()
-        self.file = file
-
-    def getStringInFormula(self,formula):
-        result = re.findall(r'[(](.*)[)]', formula, re.S)
-        return result[0]
-
-    def getPrefixInArray(self,formula):
-        if '[' in formula:
-            result = re.findall(r"(.*?)\[.*\]+", formula, re.S)
-            res = result[0]
-        else:
-            res= formula
-        return res
-
-    def check(self, smt2_formula):
-        s = Solver()
-        nsf = self.getStringInFormula(smt2_formula).replace("(","").replace(")","")# the negation of the smt2 formula
-        with open(self.file) as f:
-            data = json.load(f)
-            states = data['states']
-            boollist = ["True","False"]
-            vars = data['vars']
-            str_tmp = ""
-            str_tmp1 = ""
-            for i in states:
-                str_tmp += " "+ i
-            str_states = '(declare-datatypes () ((state' + str_tmp + ')))'
-            for i in vars:
-                if '=>' in vars[i]:
-                    str_tmp1 += ' (declare-const '+ i +' (Array Int state))'
-                elif 'bool' in vars[i]:
-                    str_tmp1 += ' (declare-const '+ i + ' Bool)'
-            str_context = str_states + str_tmp1
-        str_formula = " (assert ("
-        if '&' in nsf:
-            str_formula += 'and'
-            if '[' in nsf:
-                str_context += ' (declare-const i Int)'
-            for i in (nsf.replace(' ', '').split('&')):
-                l1 = i.split('=')
-                str_formula +=' (='
-                for j in l1:
-                    if j in states:
-                        str_formula += " " + j
-                    elif j in boollist:
-                        str_formula += " " + j.lower()
-                    elif self.getPrefixInArray(j) in vars:
-                        if j.count('[') > 0:
-                            str_formula += " (select "+self.getPrefixInArray(j) + ' i)'
-                        else:
-                            str_formula += " "+j
-                str_formula += ')'
-            str_formula += '))'
-        else:
-            if '[' in nsf:
-                str_context += ' (declare-const i Int)'
-            for i in (nsf.replace(' ', '').split('&')):
-                l1 = i.split('=')
-                str_formula += '='
-                for j in l1:
-                    if j in states:
-                        str_formula += " " + j
-                    elif self.getPrefixInArray(j) in vars:
-                        if j.count('[') > 0:
-                            str_formula += " (select " + self.getPrefixInArray(j) + ' i)'
-                str_formula += ')'
-            str_formula += ')'
-        # print(str_context+str_formula)
-        s.from_string(str_context+str_formula)
-        # s.add(parse_smt2_string((context if context else self.context) + smt2_formula))
-        # print("--------------\n")
-        # if str(s.check()) == "sat":
-        #     print(s.model())
-        # print("--------------\n")
-        return str(s.check())
