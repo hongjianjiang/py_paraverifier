@@ -1,13 +1,15 @@
 # Author: Hongjian Jiang
 
-import os
 from Utils.invHold import *
 from Utils.parse import *
 from Utils.smt2 import *
 import json
 import os
 import numpy as np
+from numpy import *
 file = '../Protocol/n_mutual.json'
+import math
+
 
 
 def load_system(filename):
@@ -495,18 +497,30 @@ class ParaSystem():
 
     def formulaExistRelationInList(self, form, fl):
         for f in fl:
-            if self.subFormula(form, f):
+            if self.subFormula(form, f) != -1:
+                return True
+            elif self.mutleFormEqual(form,f):
                 return True
         return False
 
     def constructGraph(self, formlist, invdict):
         array = np.eye(len(formlist))
-        for i in range(len(formlist)):
-            for k,v in invdict.items():
-                if self.formulaExistRelationInList(formlist[i], v):
-                    index = formlist.index(k)
-                    array[i][index] = 1
+        for f in formlist:
+            for k, v in invdict.items():
+                if self.formulaExistRelationInList(f, v):
+                    array[formlist.index(k)][formlist.index(f)] = 1
         return array
+
+    def judgeStrongConnect(self, array):
+        n = len(array)
+        a = mat(array)  # 转化为可计算的矩阵
+        b = mat(zeros((n, n)))  # 设置累加矩阵
+        for i in range(1, n + 1):  # 累加过程
+            b += a ** n
+        if 0 in b:  # 判断是不是强连通
+            return False
+        else:
+            return True
 
     def subFormula(self, form1, form2):
         str1 = re.findall(r'\((.*?)\)', form1, re.S)[0]
@@ -549,19 +563,14 @@ if __name__ == '__main__':
     str4 = '~(n i=exit)'
     str5 = '~(n i=exit & n i=idle & x=False)'
     str6 = '~(n i=try & x=True & n j=idle)'
-    # print(p.searchInvFromGivenFormula(str1))
-    # print(p.searchInvFromGivenFormula(str2))
-    # print(p.searchInvFromGivenFormula(str3))
     str7 = '~(x=True & n j=crit)'
     str8 = '~(n i=crit & x=True)'
-    # print(p.changeFormulaIntoSmv('~(n i=try & n j=crit & x=True)'))
-    # print(p.changeFormulaIntoSmv('~(n i=try & x=True & n j=idle)'))
-    # print(p.mutleFormEqual(str7, str8))
     fl = ['~(x=True & n j=crit)', '~(n i=exit & n j=crit)', '~(n i=crit & n j=crit)', '~(x=True & n i=exit)', '~(x=False & n j=exit & n i=exit)']
-    d = {'~(n i=crit & n j=crit)': ['~(x=True & n j=crit & n i=try)'], '~(x=True & n j=crit)': ['~(n i=exit & x=False & n j=crit)'], '~(n i=exit & n j=crit)': ['~(n i=crit & n j=crit)', '~(n i=exit & x=True & n j=try)'], '~(n i=exit & x=True)': ['~(x=True & n i=crit)', '~(n i=exit & x=False & n j=exit)'], '~(n i=exit & n j=exit)': ['~(n i=crit & n j=exit)']}
-    for k, v in d.items():
-        print(k, '->', v)
-    l =  ['~(x=True & n j=crit)', '~(n i=exit & n j=crit)', '~(n i=crit & n j=crit)', '~(n i=exit & x=True)', '~(n i=exit & n j=exit)']
-    print(p.constructGraph(l,d))
-    print(p.formulaExistRelationInList('~(x=True & n i=exit & n j=try)',['~(n i=crit & n j=crit)', '~(x=True & n j=try & n i=exit)']))
-    # print(p.ForminListEqu2Form('~(x=True & n i=crit)', fl))
+    d =  {'~(n i=crit & n j=crit)': ['~(n j=crit & x=True & n i=try)'], '~(n j=crit & x=True)': ['~(n j=crit & x=False & n i=exit)'], '~(n j=crit & n i=exit)': ['~(n j=crit & n i=crit)', '~(n j=try & x=True & n i=exit)'], '~(x=True & n i=exit)': ['~(n i=crit & x=True)', '~(n j=exit & x=False & n i=exit)']}
+    l =  ['~(n i=crit & n j=crit)', '~(n j=crit & x=True)', '~(n j=crit & n i=exit)', '~(x=True & n i=exit)', '~(n j=exit & x=False & n i=exit)']
+    print(p.formulaExistRelationInList('~(n i=crit & n j=crit)', ['~(x=True & n i=try & n j=crit)']))
+    print(p.subFormula('~(n i=crit & n j=crit)', '~(x=True & n i=try & n j=crit)'))
+    print(p.constructGraph(l, d))
+    print(l)
+    # print(p.mutleFormEqual('~(n i=crit & n j=exit)', '~(n i=exit & n j=crit)'))
+    print(p.judgeStrongConnect(p.constructGraph(l, d)))

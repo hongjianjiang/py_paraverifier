@@ -1,0 +1,80 @@
+16:29:23.899 [INFO] (formula_mdp.py:185) {'~(n i=crit & n j=crit)': ['~(x=True & n i=try & n j=crit)']}
+16:29:23.899 [INFO] (formula_mdp.py:186) ['~(x=True & n i=try & n j=crit)']
+16:29:24.291 [INFO] (formula_mdp.py:185) {'~(n i=crit & n j=crit)': ['~(x=True & n i=try & n j=crit)'], '~(x=True & n j=crit)': ['~(x=False & n i=exit & n j=crit)']}
+16:29:24.291 [INFO] (formula_mdp.py:186) ['~(x=True & n j=crit)', '~(x=False & n i=exit & n j=crit)']
+16:29:24.638 [INFO] (formula_mdp.py:185) {'~(n i=crit & n j=crit)': ['~(x=True & n i=try & n j=crit)'], '~(x=True & n j=crit)': ['~(x=False & n i=exit & n j=crit)'], '~(n i=exit & n j=crit)': ['~(n i=crit & n j=crit)', '~(x=True & n j=try & n i=exit)']}
+16:29:24.638 [INFO] (formula_mdp.py:186) ['~(x=True & n j=crit)', '~(n i=exit & n j=crit)', '~(n i=crit & n j=crit)', '~(x=True & n j=try & n i=exit)']
+16:29:24.638 [INFO] (formula_mdp.py:209) action doesn't change formula
+16:29:24.811 [INFO] (formula_mdp.py:185) {'~(n i=crit & n j=crit)': ['~(x=True & n i=try & n j=crit)'], '~(x=True & n j=crit)': ['~(x=False & n i=exit & n j=crit)'], '~(n i=exit & n j=crit)': ['~(n i=crit & n j=crit)', '~(x=True & n j=try & n i=exit)']}
+16:29:24.811 [INFO] (formula_mdp.py:186) ['~(x=True & n j=crit)', '~(n i=exit & n j=crit)', '~(n i=crit & n j=crit)', '~(x=True & n j=try & n i=exit)']
+16:29:25.061 [INFO] (formula_mdp.py:185) {'~(n i=crit & n j=crit)': ['~(x=True & n i=try & n j=crit)'], '~(x=True & n j=crit)': ['~(x=False & n i=exit & n j=crit)'], '~(n i=exit & n j=crit)': ['~(n i=crit & n j=crit)', '~(x=True & n j=try & n i=exit)']}
+16:29:25.061 [INFO] (formula_mdp.py:186) ['~(x=True & n j=crit)', '~(n i=exit & n j=crit)', '~(n i=crit & n j=crit)', '~(x=True & n j=try & n i=exit)']
+16:29:25.415 [INFO] (formula_mdp.py:185) {'~(n i=crit & n j=crit)': ['~(x=True & n i=try & n j=crit)'], '~(x=True & n j=crit)': ['~(x=False & n i=exit & n j=crit)'], '~(n i=exit & n j=crit)': ['~(n i=crit & n j=crit)', '~(x=True & n j=try & n i=exit)'], '~(x=True & n i=exit)': ['~(x=True & n i=crit)', '~(x=False & n i=exit & n j=exit)']}
+16:29:25.416 [INFO] (formula_mdp.py:186) ['~(x=True & n j=crit)', '~(n i=exit & n j=crit)', '~(n i=crit & n j=crit)', '~(x=True & n i=exit)', '~(x=False & n i=exit & n j=exit)']
+16:29:25.674 [INFO] (formula_mdp.py:185) {'~(n i=crit & n j=crit)': ['~(x=True & n i=try & n j=crit)'], '~(x=True & n j=crit)': ['~(x=False & n i=exit & n j=crit)'], '~(n i=exit & n j=crit)': ['~(n i=crit & n j=crit)', '~(x=True & n j=try & n i=exit)'], '~(x=True & n i=exit)': ['~(x=True & n i=crit)', '~(x=False & n i=exit & n j=exit)']}
+16:29:25.674 [INFO] (formula_mdp.py:186) ['~(x=True & n j=crit)', '~(n i=exit & n j=crit)', '~(n i=crit & n j=crit)', '~(x=True & n i=exit)', '~(x=False & n i=exit & n j=exit)']
+16:29:26.001 [INFO] (formula_mdp.py:185) {'~(n i=crit & n j=crit)': ['~(x=True & n i=try & n j=crit)']}
+16:29:26.002 [INFO] (formula_mdp.py:186) ['~(x=True & n i=try & n j=crit)']
+16:29:26.333 [INFO] (formula_mdp.py:185) {'~(n i=crit & n j=crit)': ['~(x=True & n i=try & n j=crit)']}
+16:29:26.333 [INFO] (formula_mdp.py:186) ['~(x=True & n i=try & n j=crit)']
+16:29:26.663 [INFO] (formula_mdp.py:185) {'~(n i=crit & n j=crit)': ['~(x=True & n i=try & n j=crit)']}
+16:29:26.663 [INFO] (formula_mdp.py:186) ['~(x=True & n i=try & n j=crit)']
+16:29:27.014 [INFO] (formula_mdp.py:185) {'~(n i=crit & n j=crit)': ['~(x=True & n i=try & n j=crit)'], '~(x=True & n j=crit)': ['~(x=False & n i=exit & n j=crit)']}
+16:29:27.014 [INFO] (formula_mdp.py:186) ['~(x=True & n j=crit)', '~(x=False & n i=exit & n j=crit)']
+16:29:27.378 [INFO] (formula_mdp.py:185) {'~(n i=crit & n j=crit)': ['~(x=True & n i=try & n j=crit)']}
+16:29:27.378 [INFO] (formula_mdp.py:186) ['~(x=True & n i=try & n j=crit)']
+16:29:27.680 [INFO] (formula_mdp.py:185) {'~(n i=crit & n j=crit)': ['~(x=True & n i=try & n j=crit)']}
+16:29:27.680 [INFO] (formula_mdp.py:186) ['~(x=True & n i=try & n j=crit)']
+16:29:28.022 [INFO] (formula_mdp.py:185) {'~(n i=crit & n j=crit)': ['~(x=True & n i=try & n j=crit)']}
+16:29:28.022 [INFO] (formula_mdp.py:186) ['~(x=True & n i=try & n j=crit)']
+16:29:28.399 [INFO] (formula_mdp.py:185) {'~(n i=crit & n j=crit)': ['~(x=True & n i=try & n j=crit)']}
+16:29:28.399 [INFO] (formula_mdp.py:186) ['~(x=True & n i=try & n j=crit)']
+16:29:28.729 [INFO] (formula_mdp.py:185) {'~(n i=crit & n j=crit)': ['~(x=True & n i=try & n j=crit)']}
+16:29:28.729 [INFO] (formula_mdp.py:186) ['~(x=True & n i=try & n j=crit)']
+16:29:29.043 [INFO] (formula_mdp.py:185) {'~(n i=crit & n j=crit)': ['~(x=True & n i=try & n j=crit)'], '~(x=True & n j=crit)': ['~(x=False & n i=exit & n j=crit)']}
+16:29:29.043 [INFO] (formula_mdp.py:186) ['~(x=True & n j=crit)', '~(x=False & n i=exit & n j=crit)']
+16:29:29.389 [INFO] (formula_mdp.py:185) {'~(n i=crit & n j=crit)': ['~(x=True & n i=try & n j=crit)']}
+16:29:29.390 [INFO] (formula_mdp.py:186) ['~(x=True & n i=try & n j=crit)']
+16:29:29.699 [INFO] (formula_mdp.py:185) {'~(n i=crit & n j=crit)': ['~(x=True & n i=try & n j=crit)'], '~(x=True & n j=crit)': ['~(x=False & n i=exit & n j=crit)']}
+16:29:29.699 [INFO] (formula_mdp.py:186) ['~(x=True & n j=crit)', '~(x=False & n i=exit & n j=crit)']
+16:29:30.038 [INFO] (formula_mdp.py:185) {'~(n i=crit & n j=crit)': ['~(x=True & n i=try & n j=crit)']}
+16:29:30.038 [INFO] (formula_mdp.py:186) ['~(x=True & n i=try & n j=crit)']
+16:29:30.369 [INFO] (formula_mdp.py:185) {'~(n i=crit & n j=crit)': ['~(x=True & n i=try & n j=crit)']}
+16:29:30.369 [INFO] (formula_mdp.py:186) ['~(x=True & n i=try & n j=crit)']
+16:29:30.679 [INFO] (formula_mdp.py:185) {'~(n i=crit & n j=crit)': ['~(x=True & n i=try & n j=crit)']}
+16:29:30.679 [INFO] (formula_mdp.py:186) ['~(x=True & n i=try & n j=crit)']
+16:29:31.003 [INFO] (formula_mdp.py:185) {'~(n i=crit & n j=crit)': ['~(x=True & n i=try & n j=crit)']}
+16:29:31.003 [INFO] (formula_mdp.py:186) ['~(x=True & n i=try & n j=crit)']
+16:29:31.329 [INFO] (formula_mdp.py:185) {'~(n i=crit & n j=crit)': ['~(x=True & n i=try & n j=crit)']}
+16:29:31.329 [INFO] (formula_mdp.py:186) ['~(x=True & n i=try & n j=crit)']
+16:29:31.677 [INFO] (formula_mdp.py:185) {'~(n i=crit & n j=crit)': ['~(x=True & n i=try & n j=crit)'], '~(x=True & n j=crit)': ['~(x=False & n i=exit & n j=crit)']}
+16:29:31.677 [INFO] (formula_mdp.py:186) ['~(x=True & n j=crit)', '~(x=False & n i=exit & n j=crit)']
+16:29:32.006 [INFO] (formula_mdp.py:185) {'~(n i=crit & n j=crit)': ['~(x=True & n i=try & n j=crit)'], '~(x=True & n j=crit)': ['~(x=False & n i=exit & n j=crit)'], '~(n i=exit & n j=crit)': ['~(n i=crit & n j=crit)', '~(x=True & n j=try & n i=exit)']}
+16:29:32.006 [INFO] (formula_mdp.py:186) ['~(x=True & n j=crit)', '~(n i=exit & n j=crit)', '~(n i=crit & n j=crit)', '~(x=True & n j=try & n i=exit)']
+16:29:32.259 [INFO] (formula_mdp.py:185) {'~(n i=crit & n j=crit)': ['~(x=True & n i=try & n j=crit)'], '~(x=True & n j=crit)': ['~(x=False & n i=exit & n j=crit)'], '~(n i=exit & n j=crit)': ['~(n i=crit & n j=crit)', '~(x=True & n j=try & n i=exit)']}
+16:29:32.259 [INFO] (formula_mdp.py:186) ['~(x=True & n j=crit)', '~(n i=exit & n j=crit)', '~(n i=crit & n j=crit)', '~(x=True & n j=try & n i=exit)']
+16:29:32.580 [INFO] (formula_mdp.py:185) {'~(n i=crit & n j=crit)': ['~(x=True & n i=try & n j=crit)']}
+16:29:32.580 [INFO] (formula_mdp.py:186) ['~(x=True & n i=try & n j=crit)']
+16:29:32.893 [INFO] (formula_mdp.py:185) {'~(n i=crit & n j=crit)': ['~(x=True & n i=try & n j=crit)']}
+16:29:32.894 [INFO] (formula_mdp.py:186) ['~(x=True & n i=try & n j=crit)']
+16:29:33.202 [INFO] (formula_mdp.py:185) {'~(n i=crit & n j=crit)': ['~(x=True & n i=try & n j=crit)']}
+16:29:33.202 [INFO] (formula_mdp.py:186) ['~(x=True & n i=try & n j=crit)']
+16:29:33.518 [INFO] (formula_mdp.py:185) {'~(n i=crit & n j=crit)': ['~(x=True & n i=try & n j=crit)'], '~(x=True & n j=crit)': ['~(x=False & n i=exit & n j=crit)']}
+16:29:33.519 [INFO] (formula_mdp.py:186) ['~(x=True & n j=crit)', '~(x=False & n i=exit & n j=crit)']
+16:29:33.863 [INFO] (formula_mdp.py:185) {'~(n i=crit & n j=crit)': ['~(x=True & n i=try & n j=crit)'], '~(x=True & n j=crit)': ['~(x=False & n i=exit & n j=crit)'], '~(n i=exit & n j=crit)': ['~(n i=crit & n j=crit)', '~(x=True & n j=try & n i=exit)']}
+16:29:33.863 [INFO] (formula_mdp.py:186) ['~(x=True & n j=crit)', '~(n i=exit & n j=crit)', '~(n i=crit & n j=crit)', '~(x=True & n j=try & n i=exit)']
+16:29:34.118 [INFO] (formula_mdp.py:185) {'~(n i=crit & n j=crit)': ['~(x=True & n i=try & n j=crit)'], '~(x=True & n j=crit)': ['~(x=False & n i=exit & n j=crit)'], '~(n i=exit & n j=crit)': ['~(n i=crit & n j=crit)', '~(x=True & n j=try & n i=exit)']}
+16:29:34.118 [INFO] (formula_mdp.py:186) ['~(x=True & n j=crit)', '~(n i=exit & n j=crit)', '~(n i=crit & n j=crit)', '~(x=True & n j=try & n i=exit)']
+16:29:34.491 [INFO] (formula_mdp.py:185) {'~(n i=crit & n j=crit)': ['~(x=True & n i=try & n j=crit)'], '~(x=True & n j=crit)': ['~(x=False & n i=exit & n j=crit)'], '~(n i=exit & n j=crit)': ['~(n i=crit & n j=crit)', '~(x=True & n j=try & n i=exit)'], '~(x=True & n i=exit)': ['~(x=True & n i=crit)', '~(x=False & n i=exit & n j=exit)']}
+16:29:34.491 [INFO] (formula_mdp.py:186) ['~(x=True & n j=crit)', '~(n i=exit & n j=crit)', '~(n i=crit & n j=crit)', '~(x=True & n i=exit)', '~(x=False & n i=exit & n j=exit)']
+16:29:34.491 [INFO] (formula_mdp.py:209) action doesn't change formula
+16:29:34.658 [INFO] (formula_mdp.py:185) {'~(n i=crit & n j=crit)': ['~(x=True & n i=try & n j=crit)'], '~(x=True & n j=crit)': ['~(x=False & n i=exit & n j=crit)'], '~(n i=exit & n j=crit)': ['~(n i=crit & n j=crit)', '~(x=True & n j=try & n i=exit)'], '~(x=True & n i=exit)': ['~(x=True & n i=crit)', '~(x=False & n i=exit & n j=exit)']}
+16:29:34.658 [INFO] (formula_mdp.py:186) ['~(x=True & n j=crit)', '~(n i=exit & n j=crit)', '~(n i=crit & n j=crit)', '~(x=True & n i=exit)', '~(x=False & n i=exit & n j=exit)']
+16:29:34.916 [INFO] (formula_mdp.py:185) {'~(n i=crit & n j=crit)': ['~(x=True & n i=try & n j=crit)'], '~(x=True & n j=crit)': ['~(x=False & n i=exit & n j=crit)'], '~(n i=exit & n j=crit)': ['~(n i=crit & n j=crit)', '~(x=True & n j=try & n i=exit)'], '~(x=True & n i=exit)': ['~(x=True & n i=crit)', '~(x=False & n i=exit & n j=exit)']}
+16:29:34.916 [INFO] (formula_mdp.py:186) ['~(x=True & n j=crit)', '~(n i=exit & n j=crit)', '~(n i=crit & n j=crit)', '~(x=True & n i=exit)', '~(x=False & n i=exit & n j=exit)']
+16:29:35.266 [INFO] (formula_mdp.py:185) {'~(n i=crit & n j=crit)': ['~(x=True & n i=try & n j=crit)']}
+16:29:35.266 [INFO] (formula_mdp.py:186) ['~(x=True & n i=try & n j=crit)']
+16:29:35.580 [INFO] (formula_mdp.py:185) {'~(n i=crit & n j=crit)': ['~(x=True & n i=try & n j=crit)'], '~(x=True & n j=crit)': ['~(x=False & n i=exit & n j=crit)']}
+16:29:35.580 [INFO] (formula_mdp.py:186) ['~(x=True & n j=crit)', '~(x=False & n i=exit & n j=crit)']
+16:29:35.987 [INFO] (formula_mdp.py:185) {'~(n i=crit & n j=crit)': ['~(x=True & n i=try & n j=crit)']}
+16:29:35.988 [INFO] (formula_mdp.py:186) ['~(x=True & n i=try & n j=crit)']
