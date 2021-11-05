@@ -3,7 +3,7 @@
 
 import json
 import re
-from z3 import Solver
+from z3 import *
 
 
 class SMT2(object):
@@ -127,12 +127,12 @@ class SMT2(object):
 
 
 if __name__ == '__main__':
-    smt2 = SMT2('../Protocol/n_mutual.json')
+    smt2 = SMT2('../Protocol/n_mutual1.json')
     # print(smt2.check("~(x=True & n j=T)"))
     # print(smt2.check('~(n i =C)'))
-    # s= Solver()
-    # s.from_string("(declare-datatypes () ((state I T C E))) (declare-const n (Array Int state)) (declare-const x Bool) (declare-const i Int) (declare-const j Int) (assert (and (= (select n i ) C) (= (select n j) C) (not (= i j)) ))")
-    # print(s.check())
+    s= Solver()
+    s.from_string("(declare-datatypes () ((state I T C E))) (declare-const n (Array Int state)) (declare-const x Bool) (declare-const i Int) (declare-const j Int) (assert (and (= (select n i ) C) (= (select n j) C) (not (= i j)) ))")
+    print(s.check())
     # print(s.model())
     # print(smt2.check("~(n[i]=T & x=True & C=C & n[j]=C)"))
     # print(smt2.check("~(x=True & n[j]=T)"))

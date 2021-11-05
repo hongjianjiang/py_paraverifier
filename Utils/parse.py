@@ -83,22 +83,16 @@ class ParaverifierTransformer(Transformer):
         return Vardef(arn, args, tyn)
 
     def var(self, *args):
-        # print('var:',args[0])
         return Var(args[0])
 
     def var1(self, *args):
-        # print('var1:',args)
         return EVar(args[0], args[1])
 
     def evar(self, *args):
-        # print('evar:',args)
         return args[0]
 
     def econst(self, context):
         return EConst(context)
-
-    # def eword(self,*args):
-    #     return EVar(args[0],args[1])
 
     def eparamr(self, p):
         return EParamr(p)
@@ -119,7 +113,6 @@ class ParaverifierTransformer(Transformer):
         return FUip(e1, e2)
 
     def feqn(self, *args):
-        # print(args)
         return FEqn(args[0], args[1])
 
     def fneg(self, f):
@@ -147,12 +140,9 @@ class ParaverifierTransformer(Transformer):
         return SParallel(args)
 
     def rule(self, *args):
-        # print(args)
-        # args1=str(args[0])
         return Rule(args[0], args[2], args[3], args[1])
 
     def prop(self, *args):
-        # print(args)
         return Prop(args[1], args[0])
 
     def startstate(self, *args):
@@ -171,15 +161,12 @@ def get_parser_for(start):
 
 const_parser = get_parser_for('const')
 vars_parser = get_parser_for("var")
-# param_parse = get_parser_for('paramr')
 exp_parser = get_parser_for('expression')
 state_parser = get_parser_for('state')
 form_parser = get_parser_for('formula')
 statement_parser = get_parser_for('statement')
 rule_parser = get_parser_for('rule')
 prop_parser = get_parser_for('prop')
-# rule_parser = get_parser_for("rule")
-# prop_parser = get_parser_for("prop")
 init_parser = get_parser_for('init')
 
 

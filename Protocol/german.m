@@ -1,5 +1,4 @@
 const
-
   NODE_NUM : 5;
   DATA_NUM : 2;
 

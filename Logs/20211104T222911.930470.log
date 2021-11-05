@@ -1,0 +1,68 @@
+22:29:12.071 [INFO] (formula_mdp.py:225) ['~(x=True & n j=crit & n i=try)']
+22:29:12.137 [INFO] (formula_mdp.py:233) currentForm:~(x=True & n j=crit & n i=try), action: 1, Solved: ~(x=True & n i=try) b'false'
+22:29:12.478 [INFO] (formula_mdp.py:225) ['~(x=True & n j=crit & n i=try)']
+22:29:12.534 [INFO] (formula_mdp.py:233) currentForm:~(x=True & n j=crit & n i=try), action: 1, Solved: ~(x=True & n i=try) b'false'
+22:29:12.844 [INFO] (formula_mdp.py:225) ['~(x=True & n j=crit & n i=try)']
+22:29:12.902 [INFO] (formula_mdp.py:233) currentForm:~(x=True & n j=crit & n i=try), action: 1, Solved: ~(x=True & n i=try) b'false'
+22:29:13.214 [INFO] (formula_mdp.py:225) ['~(x=True & n j=crit & n i=try)']
+22:29:13.269 [INFO] (formula_mdp.py:233) currentForm:~(x=True & n j=crit & n i=try), action: 1, Solved: ~(x=True & n i=try) b'false'
+22:29:13.614 [INFO] (formula_mdp.py:225) ['~(x=True & n j=crit & n i=try)']
+22:29:13.667 [INFO] (formula_mdp.py:233) currentForm:~(x=True & n j=crit & n i=try), action: 1, Solved: ~(x=True & n i=try) b'false'
+22:29:14.045 [INFO] (formula_mdp.py:225) ['~(x=True & n j=crit & n i=try)']
+22:29:14.101 [INFO] (formula_mdp.py:233) currentForm:~(x=True & n j=crit & n i=try), action: 2, Solved: ~(x=True & n j=crit) b'true'
+22:29:14.326 [INFO] (formula_mdp.py:240) new founded:~(n j=crit & n i=exit & x=False)b'true'
+22:29:14.499 [INFO] (formula_mdp.py:225) ['~(x=True & n j=crit)', '~(n j=crit & n i=exit & x=False)']
+22:29:14.557 [INFO] (formula_mdp.py:233) currentForm:~(n j=crit & n i=exit & x=False), action: 0, Solved: ~(n i=exit & x=False) b'false'
+22:29:14.878 [INFO] (formula_mdp.py:225) ['~(x=True & n j=crit & n i=try)']
+22:29:14.935 [INFO] (formula_mdp.py:233) currentForm:~(x=True & n j=crit & n i=try), action: 0, Solved: ~(n j=crit & n i=try) b'false'
+22:29:15.234 [INFO] (formula_mdp.py:225) ['~(x=True & n j=crit & n i=try)']
+22:29:15.289 [INFO] (formula_mdp.py:233) currentForm:~(x=True & n j=crit & n i=try), action: 0, Solved: ~(n j=crit & n i=try) b'false'
+22:29:15.581 [INFO] (formula_mdp.py:225) ['~(x=True & n j=crit & n i=try)']
+22:29:15.634 [INFO] (formula_mdp.py:233) currentForm:~(x=True & n j=crit & n i=try), action: 1, Solved: ~(x=True & n i=try) b'false'
+22:29:15.945 [INFO] (formula_mdp.py:225) ['~(x=True & n j=crit & n i=try)']
+22:29:16.002 [INFO] (formula_mdp.py:233) currentForm:~(x=True & n j=crit & n i=try), action: 1, Solved: ~(x=True & n i=try) b'false'
+22:29:16.357 [INFO] (formula_mdp.py:225) ['~(x=True & n j=crit & n i=try)']
+22:29:16.413 [INFO] (formula_mdp.py:233) currentForm:~(x=True & n j=crit & n i=try), action: 2, Solved: ~(x=True & n j=crit) b'true'
+22:29:16.646 [INFO] (formula_mdp.py:240) new founded:~(n j=crit & n i=exit & x=False)b'true'
+22:29:16.813 [INFO] (formula_mdp.py:225) ['~(x=True & n j=crit)', '~(n j=crit & n i=exit & x=False)']
+22:29:16.867 [INFO] (formula_mdp.py:233) currentForm:~(n j=crit & n i=exit & x=False), action: 0, Solved: ~(n i=exit & x=False) b'false'
+22:29:17.184 [INFO] (formula_mdp.py:225) ['~(x=True & n j=crit & n i=try)']
+22:29:17.240 [INFO] (formula_mdp.py:233) currentForm:~(x=True & n j=crit & n i=try), action: 0, Solved: ~(n j=crit & n i=try) b'false'
+22:29:17.584 [INFO] (formula_mdp.py:225) ['~(x=True & n j=crit & n i=try)']
+22:29:17.640 [INFO] (formula_mdp.py:233) currentForm:~(x=True & n j=crit & n i=try), action: 1, Solved: ~(x=True & n i=try) b'false'
+22:29:17.962 [INFO] (formula_mdp.py:225) ['~(x=True & n j=crit & n i=try)']
+22:29:18.019 [INFO] (formula_mdp.py:233) currentForm:~(x=True & n j=crit & n i=try), action: 2, Solved: ~(x=True & n j=crit) b'true'
+22:29:18.231 [INFO] (formula_mdp.py:240) new founded:~(n j=crit & n i=exit & x=False)b'true'
+22:29:18.393 [INFO] (formula_mdp.py:225) ['~(x=True & n j=crit)', '~(n j=crit & n i=exit & x=False)']
+22:29:18.449 [INFO] (formula_mdp.py:233) currentForm:~(n j=crit & n i=exit & x=False), action: 2, Solved: ~(n j=crit & n i=exit) b'true'
+22:29:18.664 [INFO] (formula_mdp.py:240) new founded:~(n i=crit & n j=crit)b'true'
+22:29:18.719 [INFO] (formula_mdp.py:240) new founded:~(n i=exit & n j=try & x=True)b'true'
+22:29:18.867 [INFO] (formula_mdp.py:225) ['~(x=True & n j=crit)', '~(n j=crit & n i=exit)', '~(n i=crit & n j=crit)', '~(n i=exit & n j=try & x=True)']
+22:29:18.921 [INFO] (formula_mdp.py:233) currentForm:~(n i=crit & n j=crit), action: 1, Solved: ~(n i=crit) b'false'
+22:29:19.153 [INFO] (formula_mdp.py:225) ['~(x=True & n j=crit)', '~(n j=crit & n i=exit)', '~(n i=crit & n j=crit)', '~(n i=exit & n j=try & x=True)']
+22:29:19.207 [INFO] (formula_mdp.py:233) currentForm:~(n i=exit & n j=try & x=True), action: 1, Solved: ~(n i=exit & x=True) b'true'
+22:29:19.422 [INFO] (formula_mdp.py:240) new founded:~(n i=crit & x=True)b'true'
+22:29:19.476 [INFO] (formula_mdp.py:240) new founded:~(n j=exit & n i=exit & x=False)b'true'
+22:29:19.641 [INFO] (formula_mdp.py:225) ['~(x=True & n j=crit)', '~(n j=crit & n i=exit)', '~(n i=crit & n j=crit)', '~(n i=exit & x=True)', '~(n j=exit & n i=exit & x=False)']
+22:29:19.695 [INFO] (formula_mdp.py:233) currentForm:~(n i=crit & x=True), action: 0, Solved: ~(x=True) b'false'
+22:29:19.938 [INFO] (formula_mdp.py:225) ['~(x=True & n j=crit)', '~(n j=crit & n i=exit)', '~(n i=crit & n j=crit)', '~(n i=exit & x=True)', '~(n j=exit & n i=exit & x=False)']
+22:29:19.995 [INFO] (formula_mdp.py:233) currentForm:~(n j=exit & n i=exit & x=False), action: 2, Solved: ~(n j=exit & n i=exit) b'true'
+22:29:20.212 [INFO] (formula_mdp.py:240) new founded:~(n i=crit & n j=exit)b'true'
+22:29:20.355 [INFO] (formula_mdp.py:225) ['~(x=True & n j=crit)', '~(n j=crit & n i=exit)', '~(n i=crit & n j=crit)', '~(n i=exit & x=True)', '~(n j=exit & n i=exit)']
+22:29:20.355 [INFO] (formula_mdp.py:247) action doesn't change formula
+22:29:20.482 [INFO] (formula_mdp.py:225) ['~(x=True & n j=crit)', '~(n j=crit & n i=exit)', '~(n i=crit & n j=crit)', '~(n i=exit & x=True)', '~(n j=exit & n i=exit)']
+22:29:20.482 [INFO] (formula_mdp.py:247) action doesn't change formula
+22:29:20.612 [INFO] (formula_mdp.py:225) ['~(x=True & n j=crit)', '~(n j=crit & n i=exit)', '~(n i=crit & n j=crit)', '~(n i=exit & x=True)', '~(n j=exit & n i=exit)']
+22:29:20.666 [INFO] (formula_mdp.py:233) currentForm:~(n i=crit & n j=exit), action: 0, Solved: ~(n j=exit) b'false'
+22:29:20.986 [INFO] (formula_mdp.py:225) ['~(x=True & n j=crit & n i=try)']
+22:29:21.039 [INFO] (formula_mdp.py:233) currentForm:~(x=True & n j=crit & n i=try), action: 0, Solved: ~(n j=crit & n i=try) b'false'
+22:29:21.334 [INFO] (formula_mdp.py:225) ['~(x=True & n j=crit & n i=try)']
+22:29:21.388 [INFO] (formula_mdp.py:233) currentForm:~(x=True & n j=crit & n i=try), action: 0, Solved: ~(n j=crit & n i=try) b'false'
+22:29:21.677 [INFO] (formula_mdp.py:225) ['~(x=True & n j=crit & n i=try)']
+22:29:21.733 [INFO] (formula_mdp.py:233) currentForm:~(x=True & n j=crit & n i=try), action: 0, Solved: ~(n j=crit & n i=try) b'false'
+22:29:22.022 [INFO] (formula_mdp.py:225) ['~(x=True & n j=crit & n i=try)']
+22:29:22.079 [INFO] (formula_mdp.py:233) currentForm:~(x=True & n j=crit & n i=try), action: 1, Solved: ~(x=True & n i=try) b'false'
+22:29:22.397 [INFO] (formula_mdp.py:225) ['~(x=True & n j=crit & n i=try)']
+22:29:22.453 [INFO] (formula_mdp.py:233) currentForm:~(x=True & n j=crit & n i=try), action: 1, Solved: ~(x=True & n i=try) b'false'
+22:29:22.789 [INFO] (formula_mdp.py:225) ['~(x=True & n j=crit & n i=try)']
+22:29:22.845 [INFO] (formula_mdp.py:233) currentForm:~(x=True & n j=crit & n i=try), action: 1, Solved: ~(x=True & n i=try) b'false'

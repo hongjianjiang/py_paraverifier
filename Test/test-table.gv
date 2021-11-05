@@ -1,0 +1,52 @@
+// The Test Table
+digraph {
+	A [label="!(n[1]=C&n[2]=C" color=red]
+	B [label="!(x=True&n[1]=C&n[2]=T)" color=red]
+	C [label="!(x=True&n[1]=C)" color=red]
+	D [label="!(n[1]=C&n[2]=T)"]
+	E [label="!(x=True&n[2]=T)"]
+	F [label="!(n[1]=C&n[2]=E&x=False)" color=red]
+	H [label="!(n[1]=C&n[2]=E)" color=red]
+	G [label="!(n[2]=E&x=False)"]
+	I [label="!(n[1]=C&x=False)"]
+	i [label="!(n[1]=T&n[2]=E & x=True)" color=red]
+	M [label="!(n[2]=E&x=True)" color=red]
+	j [label="!(n[2]=C&n[1]=C)" color=red]
+	N [label="!(n[1]=T&x=True)"]
+	h [label="!(n[1]=T&n[2]=E)"]
+	a [label="!(x=False&n[1]=E & n[2]=E)" color=red]
+	b [label="!(x=True&n[2]=C)" color=red]
+	c [label="!(x=False&n[1]=E)"]
+	d [label="!(x=False&n[2]=E)"]
+	r [label="!(n[1]=E&n[2]=E)" color=red]
+	e [label="!(n[2]=E&n[1]=C)" color=red]
+	f [label="!(n[2]=E&x=True&n[1]=T)" color=red]
+	g [label="!(n[1]=C&n[2]=C)" color=red]
+	x [label="!(n[2]=E&x=True)" color=red]
+	y [label="!(n[2]=E&n[1]=T)"]
+	z [label="!(x=True&n[1]=T)"]
+	A -> B
+	B -> C
+	B -> D
+	B -> E
+	C -> F
+	F -> H
+	F -> G
+	F -> I
+	H -> i
+	H -> j
+	i -> N
+	i -> M
+	i -> h
+	M -> a
+	M -> b
+	a -> c
+	a -> d
+	a -> r
+	r -> e
+	e -> f
+	e -> g
+	f -> x
+	f -> y
+	f -> z
+}

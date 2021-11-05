@@ -1,5 +1,5 @@
-const clientNUMS : 5;
-type state : enum{I, T, C, E};
+const clientNUMS : 3;
+type state : enum{idle, try, crit, exit};
 
      client: 1..clientNUMS;
 
@@ -8,32 +8,32 @@ var n : array [client] of state;
     x : boolean;
 
 ruleset i : client do
-rule "Try" n[i] = I ==> begin
-      n[i] := T;end;
+rule "Try" n[i] = idle ==> begin
+      n[i] := try;end;
 
 rule "Crit"
-      n[i] = T& x = true ==>begin
-      n[i] := C; x := false; end;
+      n[i] = try& x = true ==>begin
+      n[i] := crit; x := false; end;
 
 rule "Exit"
-      n[i] = C ==>begin
-      n[i] := E;end;
+      n[i] = crit ==>begin
+      n[i] := exit;end;
 
 
 rule "Idle"
-      n[i] = E ==> begin n[i] := I;
+      n[i] = exit & x = false ==> begin n[i] := idle;
       x := true;end;
 endruleset;
 
 startstate
 begin
  for i: client do
-    n[i] := I;
+    n[i] := idle;
     x := true;
   endfor;
 endstartstate;
 
 ruleset i:client; j: client do
 invariant "coherence"
- ! (n[i] = C & n[j] = C)
+ ! (n[i] = crit & n[j] = crit)
 endruleset;

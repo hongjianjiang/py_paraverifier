@@ -1,8 +1,9 @@
 #author: Hongjian Jiang
 
 
-from type import *
-from smt2 import *
+from gym.utils.type import *
+from gym.utils.smt2 import *
+from gym.utils.type import Var
 import re
 
 
@@ -12,8 +13,22 @@ def weakestprecondition(statement, formula):
     :param formula: given invariant formula
     :return: the string of the weakest precondtion
     '''
+    # print('f:', formula, 's:', statement)
     varsInformula = formula.getVars()
+    if '(' in str(formula):
+        innform = re.findall(r'\((.*?)\)', str(formula), re.S)[0]
+    else:
+        innform = re.findall(r'~(.*)', str(formula), re.S)[0]
+    varlist = []
+    valuelist = []
+    templist = innform.split('&')
+    for i in templist:
+        str1 = re.findall(r'(.*?)=', i, re.S)[0]
+        str2 = re.findall(r'=(.*)', i, re.S)[0]
+        varlist.append(str1.strip())
+        valuelist.append(str2.strip())
     if statement.isAssign():        #single assign condition
+        # print(statement,formula)
         var = statement.getVar()
         exp = statement.getExp()
         if not str(var) in varsInformula: #assignment has no affection on formula
@@ -25,10 +40,19 @@ def weakestprecondition(statement, formula):
         exps = statement.getExps()
         resultFormula = str(formula)
         for i,v in enumerate(vars):
-            if v in varsInformula:
+            if v in varlist:
+                varlist[varlist.index(v)] = exps[i]
                 resultFormula = resultFormula.replace(v,exps[i])
             else:
                 pass
+        resultFormula = '~('
+        for i in range(len(varlist)):
+            if i != len(varlist)-1:
+                resultFormula += varlist[i]+ '='+valuelist[i] +' & '
+            else:
+                resultFormula += varlist[i]+ '='+valuelist[i]
+        resultFormula+=')'
+    # print('test:', 'statement:',statement, 'formula:',formula, 'result:', resultFormula)
     return resultFormula
 
 
@@ -73,9 +97,9 @@ def invHoldForCondition3(guard, formula):
 
 
 if __name__ == '__main__':
-    statement = SAssign(EVar(Var("n"),'j'),EConst(Var("I")))
+    statement = SAssign(EVar(Var("n"),'j'),EConst(Var("exit")))
     statement1 = SAssign(EConst(Strc("x")),FChaos())
-    formula = FNeg(FAndlist([FEqn(EVar(Var("n"),'i'),EConst(Strc("C"))),FEqn(EConst(Strc("x")),EConst(Boolc("True")))]))
+    formula = FNeg(FAndlist([FEqn(EVar(Var("n"),'i'),EConst(Strc("exit"))),FEqn(EVar(Var("n"),'j'),EConst(Strc("exit"))),FEqn(EConst(Strc("x")),EConst(Boolc("False")))]))
     statement2 = SParallel([statement, statement1])
     wp = weakestprecondition(statement2,formula)
     # print(invHoldForCondition3(FEqn(EVar(Var("n"),"j"),EConst(Strc("E")))),wp)
