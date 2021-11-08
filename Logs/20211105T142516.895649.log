@@ -1,2 +1,0 @@
-14:25:17.020 [INFO] (formula_mdp.py:228) ['~(n j=crit & x=True & n i=try)']
-14:25:17.087 [INFO] (formula_mdp.py:236) currentForm:~(n j=crit & x=True & n i=try), action: 0, Solved: ~(x=True & n i=try) b'false'

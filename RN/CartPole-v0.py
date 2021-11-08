@@ -3,7 +3,7 @@ import gym
 env = gym.make('FormulaEnv-v0', filename='../Protocol/n_mutual.json')
 
 # print(env.action_space)
-for i_episode in range(20):
+for i_episode in range(50):
     observation = env.reset()
     # print(observation)
     for t in range(100):

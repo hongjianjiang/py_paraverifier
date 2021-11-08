@@ -1,5 +1,0 @@
-23:48:41.676 [INFO] (formula_mdp.py:166) {'~(n i=crit & n j=crit)': ['~(n j=crit & n i=try & x=True)']}
-23:48:41.676 [INFO] (formula_mdp.py:167) ['~(n i=crit & n j=crit)', '~(n j=crit & n i=try & x=True)']
-23:48:41.876 [INFO] (formula_mdp.py:200) False
-23:48:41.876 [INFO] (formula_mdp.py:166) {'~(n i=crit & n j=crit)': ['~(n j=crit & n i=try & x=True)']}
-23:48:41.876 [INFO] (formula_mdp.py:167) ['~(n i=crit & n j=crit)', '~(n j=crit & n i=try & x=True)']

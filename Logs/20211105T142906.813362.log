@@ -1,4 +1,0 @@
-14:29:07.003 [INFO] (formula_mdp.py:236) currentForm:~(x=True & n i=try & n j=crit), action: 1, Solved: ~(x=True & n j=crit) b'true'
-14:29:07.365 [INFO] (formula_mdp.py:236) currentForm:~(x=False & n j=crit & n i=exit), action: 2, Solved: ~(x=False & n j=crit) b'false'
-14:29:07.738 [INFO] (formula_mdp.py:236) currentForm:~(x=True & n i=try & n j=crit), action: 1, Solved: ~(x=True & n j=crit) b'true'
-14:29:08.106 [INFO] (formula_mdp.py:236) currentForm:~(x=False & n j=crit & n i=exit), action: 1, Solved: ~(x=False & n i=exit) b'false'
