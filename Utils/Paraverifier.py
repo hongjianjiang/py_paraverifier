@@ -566,8 +566,9 @@ if __name__ == '__main__':
     str7 = '~(x=True & n j=crit)'
     str8 = '~(n i=crit & x=True)'
     fl = ['~(x=True & n j=crit)', '~(n i=exit & n j=crit)', '~(n i=crit & n j=crit)', '~(x=True & n i=exit)', '~(x=False & n j=exit & n i=exit)']
-    d =  {'~(n i=crit & n j=crit)': ['~(n j=crit & x=True & n i=try)'], '~(n j=crit & x=True)': ['~(n j=crit & x=False & n i=exit)'], '~(n j=crit & n i=exit)': ['~(n j=crit & n i=crit)', '~(n j=try & x=True & n i=exit)'], '~(x=True & n i=exit)': ['~(n i=crit & x=True)', '~(n j=exit & x=False & n i=exit)']}
-    l =  ['~(n i=crit & n j=crit)', '~(n j=crit & x=True)', '~(n j=crit & n i=exit)', '~(x=True & n i=exit)', '~(n j=exit & x=False & n i=exit)']
+    d =  {'~(n i=crit & n j=crit)': ['~(x=True & n j=crit & n i=try)'], '~(x=True & n j=crit)': ['~(x=False & n j=crit & n i=exit)'], '~(n j=crit & n i=exit)': ['~(n j=crit & n i=crit)', '~(x=True & n i=exit & n j=try)'], '~(x=True & n i=exit)': ['~(x=True & n i=crit)', '~(x=False & n i=exit & n j=exit)'], '~(n i=exit & n j=exit)': ['~(n i=crit & n j=exit)']}
+
+    l =  ['~(n i=crit & n j=crit)', '~(x=True & n j=crit)', '~(n j=crit & n i=exit)', '~(x=True & n i=exit)', '~(n i=exit & n j=exit)']
     print(p.formulaExistRelationInList('~(n i=crit & n j=crit)', ['~(x=True & n i=try & n j=crit)']))
     print(p.subFormula('~(n i=crit & n j=crit)', '~(x=True & n i=try & n j=crit)'))
     print(p.constructGraph(l, d))
