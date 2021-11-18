@@ -34,54 +34,9 @@
             "i",
             "d"
         ],
-        "guard": "Chan1_Cmd i = Empty &  Chan2_Cmd i = Empty &  Chan3_Cmd i = Empty &  Cache_State i = I &  InvSet i  = false &  ShrSet i  = false &  ExGntd = false &  CurCmd = Empty &  MemData = d &  AuxData = d"
+        "guard": "Chan1_Cmd i = Empty & Chan2_Cmd i = Empty & Chan3_Cmd i = Empty & Cache_State i = I & InvSet i  = false & ShrSet i  = false & ExGntd = false & CurCmd = Empty & MemData = d & AuxData = d"
     },
     "rules": [
-        {
-            "name": "Store",
-            "var": [
-                "i"
-            ],
-            "guard": "Cache_State i = E",
-            "assign": {
-                "Cache_Data i": "d",
-                "AuxData": "d"
-            }
-        },
-        {
-            "name": "SendReqS",
-            "var": [
-                "i"
-            ],
-            "guard": "Chan1_Cmd i = Empty & Cache_State i = I",
-            "assign": {
-                "Chan1_Cmd i": "ReqS"
-            }
-        },
-        {
-            "name": "SendReqE",
-            "var": [
-                "i"
-            ],
-            "guard": "Chan1_Cmd i = Empty & Cache_State i = I | Cache_State i = S",
-            "assign": {
-                "Chan1_Cmd i": "ReqE"
-            }
-        },
-        {
-            "name": "RecvReqS",
-            "var": [
-                "i",
-                "j"
-            ],
-            "guard": "CurCmd = Empty & Chan1_Cmd i = ReqS",
-            "assign": {
-                "CurCmd": "ReqS",
-                "CurPtr": "i",
-                "Chan1_Cmd i": "Empty",
-                "InvSet j ": "ShrSet j "
-            }
-        },
         {
             "name": "RecvReqE",
             "var": [
@@ -97,18 +52,7 @@
             }
         },
         {
-            "name": "SendInv",
-            "var": [
-                "i"
-            ],
-            "guard": "Chan2_Cmd i = Empty & InvSet i  = true & CurCmd = ReqE | CurCmd = ReqS & ExGntd = true",
-            "assign": {
-                "Chan2_Cmd i": "Inv",
-                "InvSet i ": "false"
-            }
-        },
-        {
-            "name": "SendInvAck1",
+            "name": "SendInvAck",
             "var": [
                 "i"
             ],
@@ -116,44 +60,20 @@
             "assign": {
                 "Chan2_Cmd i": "Empty",
                 "Chan3_Cmd i": "InvAck",
-                "Cache_State i": "I"
+                "if(Cache_State=E)thenChan3_Data i": "Cache_Data i"
             }
         },
         {
-            "name": "SendInvAck2",
-            "var": [
-                "i"
-            ],
-            "guard": "Chan2_Cmd i = Inv & Chan3_Cmd i = Empty & Cache_State i = E",
-            "assign": {
-                "Chan2_Cmd i": "Empty",
-                "Chan3_Cmd i": "InvAck",
-                "Chan3_Data i": "Cache_Data i",
-                "Cache_State i": "I"
-            }
-        },
-        {
-            "name": "RecvInvAck1",
-            "var": [
-                "i"
-            ],
-            "guard": "Chan3_Cmd i = InvAck & ~ (CurCmd = Empty) & ExGntd = true",
-            "assign": {
-                "Chan3_Cmd i": "Empty",
-                "ShrSet i ": "false",
-                "ExGntd": "false",
-                "MemData": "Chan3_Data i"
-            }
-        },
-        {
-            "name": "RecvInvAck2",
+            "name": "RecvInvAck",
             "var": [
                 "i"
             ],
             "guard": "Chan3_Cmd i = InvAck & ~ (CurCmd = Empty)",
             "assign": {
                 "Chan3_Cmd i": "Empty",
-                "ShrSet i ": "false"
+                "ShrSet i ": "false",
+                "if(ExGntd=true)thenExGntd": "false",
+                "MemData": "Chan3_Data i"
             }
         },
         {

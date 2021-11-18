@@ -648,7 +648,7 @@ if __name__ == '__main__':
             else:
                 sys.stderr.write(help_msg)
                 sys.exit()
-        if murphi is not None and os.path.isfile(murphi):
+        if murphi is not None and os.path.isfile('../Protocol/'+ murphi):
             basename = os.path.basename(murphi)
             if name is None:
                 name = basename if len(basename.split('.')) == 1 else '.'.join(basename.split('.')[:-1])

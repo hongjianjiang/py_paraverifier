@@ -1,0 +1,16 @@
+23:15:03.102 [INFO] (formula_mdp.py:241) ~(n j=crit & n i=try & x=True)1
+23:15:03.919 [INFO] (formula_mdp.py:241) ~(n j=crit & n i=exit & x=False)0
+23:15:04.189 [INFO] (formula_mdp.py:241) ~(n j=crit & n i=try & x=True)1
+23:15:04.244 [INFO] (formula_mdp.py:241) ~(n j=crit & n i=exit & x=False)0
+23:15:04.507 [INFO] (formula_mdp.py:241) ~(n j=crit & n i=try & x=True)1
+23:15:04.562 [INFO] (formula_mdp.py:241) ~(n j=crit & n i=exit & x=False)0
+23:15:04.828 [INFO] (formula_mdp.py:241) ~(n j=crit & n i=try & x=True)1
+23:15:04.884 [INFO] (formula_mdp.py:241) ~(n j=crit & n i=exit & x=False)0
+23:15:05.150 [INFO] (formula_mdp.py:241) ~(n j=crit & n i=try & x=True)1
+23:15:05.206 [INFO] (formula_mdp.py:241) ~(n j=crit & n i=exit & x=False)0
+23:15:05.477 [INFO] (formula_mdp.py:241) ~(n j=crit & n i=try & x=True)1
+23:15:05.531 [INFO] (formula_mdp.py:241) ~(n j=crit & n i=exit & x=False)0
+23:15:05.819 [INFO] (formula_mdp.py:241) ~(n j=crit & n i=try & x=True)1
+23:15:05.877 [INFO] (formula_mdp.py:241) ~(n j=crit & n i=exit & x=False)0
+23:15:06.177 [INFO] (formula_mdp.py:241) ~(n j=crit & n i=try & x=True)1
+23:15:06.238 [INFO] (formula_mdp.py:241) ~(n j=crit & n i=exit & x=False)0

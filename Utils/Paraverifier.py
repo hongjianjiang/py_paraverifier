@@ -7,8 +7,9 @@ import json
 import os
 import numpy as np
 from numpy import *
-file = '../Protocol/n_mutual.json'
 import math
+
+file = '../Protocol/n_german1.json'
 
 
 
@@ -21,6 +22,7 @@ def load_system(filename):
     for key, value in data['vars'].items():
         T = parse_vars(key)
         vars.append(T)
+
     states = []
     for i, nm in enumerate(data['states']):
         states.append(nm)
@@ -147,7 +149,7 @@ class ParaSystem():
                 self.allinvs = fp['allinvs']
         else:
             for inv in self.allinvs:
-                #self.invs:
+                print(inv)
                 if self.search_flag[inv]:
                     continue
                 else:
@@ -464,6 +466,22 @@ class ParaSystem():
                 return True
         return False
 
+    def returnForminListEqu2Form(self, form, l):
+        if self.ForminListEqu2Form(form, l):
+            for f in l:
+                if self.mutleFormEqual(f, form):
+                    return f
+        return ''
+
+    def returnIndexForminListEqu2Form(self, form, l):
+        if self.ForminListEqu2Form(form, l):
+            for f in l:
+                if self.mutleFormEqual(f, form):
+                    return l.index(f)
+        return -1
+
+
+
     def changeFormulaIntoSmv(self, form1):
         inner = re.findall(r'\((.*?)\)', form1, re.S)[0]
         innerlist = inner.split('&')
@@ -556,7 +574,7 @@ class ParaSystem():
 
 
 if __name__ == '__main__':
-    p = load_system('n_mutual.json')
+    p = load_system('n_german1.json')
     str1 = '~(n j=try & n i=crit & x=True)'
     str2 = '~(n j=try & n i=crit)'
     str3 = '~(n j=try & x=True)'
@@ -564,14 +582,18 @@ if __name__ == '__main__':
     str5 = '~(n i=exit & n i=idle & x=False)'
     str6 = '~(n i=try & x=True & n j=idle)'
     str7 = '~(x=True & n j=crit)'
-    str8 = '~(n i=crit & x=True)'
-    fl = ['~(x=True & n j=crit)', '~(n i=exit & n j=crit)', '~(n i=crit & n j=crit)', '~(x=True & n i=exit)', '~(x=False & n j=exit & n i=exit)']
-    d =  {'~(n i=crit & n j=crit)': ['~(x=True & n j=crit & n i=try)'], '~(x=True & n j=crit)': ['~(x=False & n j=crit & n i=exit)'], '~(n j=crit & n i=exit)': ['~(n j=crit & n i=crit)', '~(x=True & n i=exit & n j=try)'], '~(x=True & n i=exit)': ['~(x=True & n i=crit)', '~(x=False & n i=exit & n j=exit)'], '~(n i=exit & n j=exit)': ['~(n i=crit & n j=exit)']}
+    str8 = 'x=True & n i=try'
+    # print(p.searchInvFromGivenFormula(str8))
+    # fl = ['~(x=True & n j=crit)', '~(n i=exit & n j=crit)', '~(n i=crit & n j=crit)', '~(x=True & n i=exit)', '~(x=False & n j=exit & n i=exit)']
+    # d =  {'~(n i=crit & n j=crit)': ['~(x=True & n j=crit & n i=try)'], '~(x=True & n j=crit)': ['~(x=False & n j=crit & n i=exit)'], '~(n j=crit & n i=exit)': ['~(n j=crit & n i=crit)', '~(x=True & n i=exit & n j=try)'], '~(x=True & n i=exit)': ['~(x=True & n i=crit)', '~(x=False & n i=exit & n j=exit)'], '~(n i=exit & n j=exit)': ['~(n i=crit & n j=exit)']}
 
-    l =  ['~(n i=crit & n j=crit)', '~(x=True & n j=crit)', '~(n j=crit & n i=exit)', '~(x=True & n i=exit)', '~(n i=exit & n j=exit)']
-    print(p.formulaExistRelationInList('~(n i=crit & n j=crit)', ['~(x=True & n i=try & n j=crit)']))
-    print(p.subFormula('~(n i=crit & n j=crit)', '~(x=True & n i=try & n j=crit)'))
-    print(p.constructGraph(l, d))
-    print(l)
-    # print(p.mutleFormEqual('~(n i=crit & n j=exit)', '~(n i=exit & n j=crit)'))
-    print(p.judgeStrongConnect(p.constructGraph(l, d)))
+    # l =  ['~(n i=crit & n j=crit)', '~(x=True & n j=crit)', '~(n j=crit & n i=exit)', '~(x=True & n i=exit)', '~(n i=exit & n j=exit)']
+    # print(p.formulaExistRelationInList('~(n i=crit & n j=crit)', ['~(x=True & n i=try & n j=crit)']))
+    # print(p.subFormula('~(n i=crit & n j=try)', '~(x=True & n i=try & n j=crit)'))
+    # print(p.constructGraph(l, d))
+    # print(l)
+    # # print(p.mutleFormEqual('~(n i=crit & n j=exit)', '~(n i=exit & n j=crit)'))
+    # print(p.judgeStrongConnect(p.constructGraph(l, d)))
+
+    # fl = ['~(n j=crit & x=True)', '~(n i=exit & n j=crit)', '~(n i=crit & n j=crit)', '~(n i=exit & x=True)', '~(n i=crit & x=True)', '~(n i=exit & n j=exit)', '~(n i=crit & n j=exit)']
+    # print(p.returnIndexForminListEqu2Form('~(n j=crit & n i=exit)', fl))

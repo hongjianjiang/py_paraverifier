@@ -1,0 +1,1 @@
+/Users/sword/PycharmProjects/py_paraverifier/RN/run_carEnv.py --env-name CartPole-v0 --evaluate --model-dir results/20211118T154138.975024_DQN_ --show-test-progress

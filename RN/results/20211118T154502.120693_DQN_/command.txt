@@ -1,0 +1,1 @@
+/Users/sword/PycharmProjects/py_paraverifier/RN/run_formulaEnv.py --env-name FormulaEnv-v0 --evaluate --model-dir results/20211117T223437.810324_DQN_ --show-test-progress

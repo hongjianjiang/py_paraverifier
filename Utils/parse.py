@@ -9,15 +9,12 @@ grammar = r"""
         | "true" -> true
         | "false" -> false 
 
-    ?var: WORD  [("_" WORD)*|(SIGNED_NUMBER "_" WORD)* | ] -> var
+    ?var: WORD [("_" WORD)* | (SIGNED_NUMBER "_" WORD)* | ] -> var
     ?var1 : var WORD -> var1 
-    //?paramr : WORD -> paramref
-
     ?expression:  const -> econst
         | WORD -> econst
         | var1 -> evar
         | "if" formula "then" expression "else" expression -> eite
-//        | (WORD WORD) -> eparamr
 
     ?statement: "'" expression "'" ":"  "'" expression "'" -> sassign
         | statement "," statement -> sparallel
@@ -83,7 +80,10 @@ class ParaverifierTransformer(Transformer):
         return Vardef(arn, args, tyn)
 
     def var(self, *args):
-        return Var(args[0])
+        if len(args)>1:
+            return Var(str('_'.join(args)))
+        else:
+            return Var(args[0])
 
     def var1(self, *args):
         return EVar(args[0], args[1])
@@ -160,7 +160,7 @@ def get_parser_for(start):
 
 
 const_parser = get_parser_for('const')
-vars_parser = get_parser_for("var")
+vars_parser = get_parser_for("var1")
 exp_parser = get_parser_for('expression')
 state_parser = get_parser_for('state')
 form_parser = get_parser_for('formula')
@@ -231,8 +231,15 @@ if __name__ == '__main__':
     text1 = r"{'vars': ['i', 'j'], 'prop': '~ (n i = C & n j = C)'}"
     text2 = r"{'var': 'k', 'guard': 'n[k] = I', 'assign': {'n[k]': 'T'}}"
     assign = r"'n k': 'T'"
-    prop = r"{'vars': ['i', 'j'], 'prop': '~ (n i  = C & n j  = C)'}"
+    prop = r'''{
+            'vars': [
+                'i'
+            ],
+            'prop': '~ (MemData = AuxData & Cache_Stateb i = I)'
+        }'''
+
     # rule = r"{'name': 'Idle','var': "['i']", 'guard': 'n i  = E','assign': {'n i ': 'I','x': 'true'}}"
+    str1 = 'Cache a'
     print(parse_prop(prop))
     # print(parse_rule(text2).getArgs()[0])
     # print(parse_rule(rule))

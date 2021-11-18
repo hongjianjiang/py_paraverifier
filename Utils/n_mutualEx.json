@@ -1,0 +1,21 @@
+{
+    "name": "n_mutualEx",
+    "vars": {
+        "n": "nat=>nat",
+        "x": "bool"
+    },
+    "states": [
+        "I",
+        "T",
+        "C",
+        "E"
+    ],
+    "init": {
+        "var": [
+            "i"
+        ],
+        "guard": "n i  = I"
+    },
+    "rules": [],
+    "invs": []
+}

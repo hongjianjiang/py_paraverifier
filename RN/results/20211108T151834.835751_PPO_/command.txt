@@ -1,1 +1,0 @@
-run_ppo.py --env-name FormulaEnv-v0 --evaluate --model-dir results/20211108T151502.124702_PPO_/

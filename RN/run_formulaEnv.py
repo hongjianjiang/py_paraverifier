@@ -8,7 +8,7 @@ if __name__ == '__main__':
     parser = Trainer.get_argument()
     parser = DQN.get_argument(parser)
     parser.set_defaults(test_interval=2000)
-    parser.set_defaults(max_steps=100000)
+    parser.set_defaults(max_steps=10000)
     parser.set_defaults(gpu=1)
     parser.set_defaults(n_warmup=500)
     parser.set_defaults(batch_size=32)
@@ -17,7 +17,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     env = gym.make(args.env_name, filename='../Protocol/n_mutual.json')
-    test_env = gym.make(args.env_name, filename='../Protocol/n_mutual')
+    test_env = gym.make(args.env_name, filename='../Protocol/n_mutual.json')
     policy = DQN(
         enable_double_dqn=args.enable_double_dqn,
         enable_dueling_dqn=args.enable_dueling_dqn,

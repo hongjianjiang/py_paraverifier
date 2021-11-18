@@ -8,6 +8,7 @@ myWindow = p.window.Window(1000,500,caption="我的窗口！！！！！！！")
 #参数对应设置标签上显示的内容，后两个参数显示在窗口的坐标为（250,250）
 l = ['~(n i=crit & n j=crit)', '~(x=True & n j=crit)', '~(n j=crit & n i=exit)', '~(x=True & n i=exit)', '~(n i=exit & n j=exit)']
 label=p.text.Label(str(l),x=20,y=250)
+label1=p.text.Label(str(l),x=20,y=350)
 
 #使用修饰器@myWindow.event将后面定义的on_draw()方法关联到窗口对象game_win
 @myWindow.event
@@ -16,6 +17,7 @@ def on_draw():
     myWindow.clear()
     #调用文本标签对象label的draw()方法，在窗口中绘制出文本标签的外观
     label.draw()
+    label1.draw()
 
 if __name__ == '__main__':
     #调用pyglet.app.run()方法让程序进入Pyglet的默认事件循环

@@ -1,0 +1,8 @@
+22:27:58.532 [INFO] (formula_mdp.py:222) found invs:['~(n i=crit & n j=crit)', '~(n j=crit & x=True)', '~(n j=crit & n i=exit)', '~(x=True & n i=exit)', '~(n j=exit & n i=exit)']
+22:28:12.224 [INFO] (formula_mdp.py:233) found invs:['~(n i=crit & n j=crit)', '~(n j=crit & x=True)', '~(n j=crit & n i=exit)', '~(x=True & n i=exit)', '~(n j=exit & n i=exit)']
+22:28:22.481 [INFO] (formula_mdp.py:233) found invs:['~(n i=crit & n j=crit)', '~(n j=crit & x=True)', '~(n j=crit & n i=exit)', '~(x=True & n i=exit)', '~(n j=exit & n i=exit)']
+22:29:05.381 [INFO] (formula_mdp.py:233) found invs:['~(n i=crit & n j=crit)', '~(n j=crit & x=True)', '~(n j=crit & n i=exit)', '~(x=True & n i=exit)', '~(n j=exit & n i=exit)']
+22:29:13.145 [INFO] (formula_mdp.py:233) found invs:['~(n i=crit & n j=crit)', '~(n j=crit & x=True)', '~(n j=crit & n i=exit)', '~(x=True & n i=exit)', '~(n j=exit & n i=exit)']
+22:29:14.900 [INFO] (formula_mdp.py:233) found invs:['~(n i=crit & n j=crit)', '~(n j=crit & x=True)', '~(n j=crit & n i=exit)', '~(x=True & n i=exit)', '~(n j=exit & n i=exit)']
+22:29:22.851 [INFO] (formula_mdp.py:233) found invs:['~(n i=crit & n j=crit)', '~(n j=crit & x=True)', '~(n j=crit & n i=exit)', '~(x=True & n i=exit)', '~(n j=exit & n i=exit)']
+22:29:48.596 [INFO] (formula_mdp.py:233) found invs:['~(n i=crit & n j=crit)', '~(n j=crit & x=True)', '~(n j=crit & n i=exit)', '~(x=True & n i=exit)', '~(n j=exit & n i=exit)']

@@ -72,7 +72,7 @@ class Murphi(object):
 
 if __name__ == '__main__':
     ctx = ''
-    with open('mutualEx.m', 'r') as f:
+    with open('mutual.m', 'r') as f:
         ctx = f.read()
     mu = Murphi('mutualEx',
         '/Users/sword/Documents/cmurphi5.4.9.1/src/mu',

@@ -1,1 +1,0 @@
-/Users/sword/PycharmProjects/py_paraverifier/RN/run_ppo.py --env-name FormulaEnv-v0

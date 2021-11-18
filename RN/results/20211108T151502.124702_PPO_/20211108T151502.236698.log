@@ -1,6 +1,0 @@
-15:15:04.316 [INFO] (on_policy_trainer.py:75) Total Epi:     1 Steps:       6 Episode Steps:     6 Return:  37.0000 FPS:  2.92
-15:15:04.672 [INFO] (on_policy_trainer.py:75) Total Epi:     2 Steps:       7 Episode Steps:     1 Return: -5.0000 FPS:  2.83
-15:15:05.947 [INFO] (on_policy_trainer.py:75) Total Epi:     3 Steps:      11 Episode Steps:     4 Return:  20.0000 FPS:  3.14
-15:15:06.319 [INFO] (on_policy_trainer.py:75) Total Epi:     4 Steps:      12 Episode Steps:     1 Return: -5.0000 FPS:  2.70
-15:15:06.686 [INFO] (on_policy_trainer.py:75) Total Epi:     5 Steps:      13 Episode Steps:     1 Return: -5.0000 FPS:  2.74
-15:15:07.025 [INFO] (on_policy_trainer.py:75) Total Epi:     6 Steps:      14 Episode Steps:     1 Return: -2.0000 FPS:  2.96

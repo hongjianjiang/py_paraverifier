@@ -30,7 +30,7 @@ Directory Structure:
 ---
 - Protocol stores the ocaml files of parameterized protocol<br>
 - Utils is used for basic function<br>
-     - gen: generator of the json file
+     - translation: generator of the json file python translation -m 协议名
      - invHold: the judger of the invHold rules and the weakest precondition
      - type:datatype for Paraverifier types
      - smt2: the smt2 checker 

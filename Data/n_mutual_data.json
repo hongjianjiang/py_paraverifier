@@ -1,9 +1,0 @@
-{"relation":
-{"~(n i=crit & n j=crit)": ["~(n i=try & n j=crit & x=True)"],
-  "~(n i=try & n j=crit & x=True)": ["~(n j=crit & x=True & n i=idle)"],
-  "~(n i=crit & x=True & n j=idle)": ["~(n i=try & x=True & n j=idle)"],
-  "~(n i=try & x=True & n j=idle)": ["~(x=True & n j=idle & n i=idle)"],
-  "~(x=True & n i=idle & n j=idle)": ["~(x=False & n j=exit & n i=idle)"],
-  "~(x=False & n i=exit & n j=idle)": ["~(x=False & n i=crit & n j=idle)"],
-  "~(x=False & n i=crit & n j=idle)": []},
-  "allinvs": ["~(n i=crit & n j=crit)", "~(n i=try & n j=crit & x=True)", "~(n i=crit & x=True & n j=idle)", "~(n i=try & x=True & n j=idle)", "~(x=True & n i=idle & n j=idle)", "~(x=False & n i=exit & n j=idle)", "~(x=False & n i=crit & n j=idle)"]}
